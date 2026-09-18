@@ -10,6 +10,7 @@ import { ansichtStart } from './views/start.js';
 import { ansichtBerichtsheft } from './views/berichtsheft.js';
 import { ansichtFachbericht } from './views/fachbericht.js';
 import { ansichtWissen } from './views/wissen.js';
+import { ansichtLexikon } from './views/lexikon.js';
 import { ansichtKonto } from './views/konto.js';
 
 const app = document.getElementById('app');
@@ -19,6 +20,7 @@ const NAV = [
   { pfad: '#/berichtsheft/neu', text: 'Berichtsheft' },
   { pfad: '#/fachbericht/neu', text: 'Fachbericht' },
   { pfad: '#/wissen/neu', text: 'Erklären' },
+  { pfad: '#/lexikon', text: 'Nachschlagen' },
 ];
 
 function zeichneNav() {
@@ -68,6 +70,9 @@ async function route() {
         break;
       case 'wissen':
         await ansichtWissen(app, id || 'neu');
+        break;
+      case 'lexikon':
+        await ansichtLexikon(app, id || '');
         break;
       case 'konto':
         await ansichtKonto(app, id, { nachAbmeldung: () => navigiere('#/') });

@@ -17,6 +17,7 @@ import {
   FACHSPRACHE_REGELN,
 } from './prompts.js';
 import { promptHinweise } from './fachsprache.js';
+import { faktenBlock } from './wissen/index.js';
 import {
   offlineBerichtsheft,
   offlineFachbericht,
@@ -66,6 +67,7 @@ export async function baueBerichtsheft({ transkript, kontext }) {
         '',
         `Diktat:\n"""${transkript}"""`,
         promptHinweise(transkript),
+        faktenBlock(transkript, 2),
         kontextBlock(kontext),
         '',
         'Erzeuge je genanntem Wochentag einen Block. Formuliere die Punkte in Fachsprache,',
@@ -97,6 +99,7 @@ export async function baueFachbericht({ transkript, kontext }) {
         '',
         `Schilderung:\n"""${transkript}"""`,
         promptHinweise(transkript),
+        faktenBlock(transkript, 4),
         kontextBlock(kontext),
         '',
         'Anforderungen:',
@@ -140,6 +143,7 @@ export async function baueErklaerung({ begriff, kontext, tiefe = 1 }) {
         '',
         `Umfang: ${umfang}`,
         promptHinweise(begriff),
+        faktenBlock(begriff, 2),
         kontextBlock(kontext),
         '',
         'Gliedere in Abschnitte wie: Kurzdefinition, Aufbau, Funktionsprinzip, Einsatz und Einbau,',
@@ -176,6 +180,7 @@ export async function baueVertiefung({ begriff, frage, kontext, bisher, tiefe = 
         'Wiederhole das Bisherige nicht, sondern gehe fachlich tiefer:',
         'Ursachen, physikalische Zusammenhänge, Zahlenwerte, Folgen, Gegenmaßnahmen, Regelwerke.',
         promptHinweise(`${begriff || ''} ${frage || ''}`),
+        faktenBlock(`${begriff || ''} ${frage || ''}`, 2),
         kontextBlock(kontext),
       ]
         .filter(Boolean)
@@ -202,6 +207,7 @@ export async function baueZeichnung({ beschreibung, kontext, titel }) {
       prompt: [
         `Erstelle eine technische Prinzipskizze zu: "${beschreibung}"`,
         promptHinweise(beschreibung),
+        faktenBlock(beschreibung, 2),
         kontextBlock(kontext),
         '',
         'Die Skizze muss fachlich korrekt sein: richtige Einbaureihenfolge, richtige Fließrichtung,',

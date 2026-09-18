@@ -5,7 +5,8 @@
  * ohne KI-Schlüssel – allein aus der Fachsprache-Engine und der Wissensbasis.
  * Die App bleibt damit auch ohne Serverschlüssel voll bedienbar.
  */
-import { normalisiere, findeWissen, GRUNDWERKZEUG } from './fachsprache.js';
+import { normalisiere, GRUNDWERKZEUG } from './fachsprache.js';
+import { findeWissen, sucheWissen, schluessel } from './wissen/index.js';
 import { schemaZeichnung } from './svg.js';
 
 export const WOCHENTAGE = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
@@ -106,10 +107,8 @@ export function offlineFachbericht(transkript) {
     const w = findeWissen(t.fach) || findeWissen(t.roh);
     if (w && !gesehen.has(w.begriff)) {
       gesehen.add(w.begriff);
-      erklaerungen.push({
-        begriff: w.begriff,
-        text: `${w.kurz}\n\n${w.funktion}`,
-      });
+      const zusatz = w.werte?.length ? `\n\nKennwerte: ${w.werte.slice(0, 3).join(' · ')}` : '';
+      erklaerungen.push({ begriff: w.begriff, text: `${w.kurz}\n\n${w.funktion}${zusatz}` });
     }
     if (erklaerungen.length >= 5) break;
   }
@@ -136,70 +135,94 @@ export function offlineFachbericht(transkript) {
   };
 }
 
+/** Baut aus einem Datenbankeintrag die Abschnitte einer Erklärung. */
+function abschnitteAus(eintrag) {
+  const abschnitte = [{ titel: 'Funktionsprinzip', text: eintrag.funktion, punkte: [] }];
+  if (eintrag.aufbau?.length) abschnitte.push({ titel: 'Aufbau', text: '', punkte: eintrag.aufbau });
+  if (eintrag.einsatz?.length) abschnitte.push({ titel: 'Einsatz und Einbau', text: '', punkte: eintrag.einsatz });
+  if (eintrag.werte?.length) abschnitte.push({ titel: 'Kennwerte und Richtwerte', text: '', punkte: eintrag.werte });
+  if (eintrag.formeln?.length) {
+    abschnitte.push({
+      titel: 'Berechnung',
+      text: '',
+      punkte: eintrag.formeln.map((f) => `${f.name}: ${f.formel} – ${f.erklaerung}`),
+    });
+  }
+  if (eintrag.hinweise?.length) abschnitte.push({ titel: 'Praxishinweise', text: '', punkte: eintrag.hinweise });
+  if (eintrag.stoerungen?.length) abschnitte.push({ titel: 'Typische Fehlerbilder', text: '', punkte: eintrag.stoerungen });
+  return abschnitte;
+}
+
 export function offlineErklaerung(begriff) {
-  const w = findeWissen(begriff);
-  if (!w) {
+  const eintrag = findeWissen(begriff);
+  if (!eintrag) {
     const n = normalisiere(begriff);
     const fach = n.treffer[0]?.fach;
+    const aehnlich = sucheWissen(begriff, { grenze: 5 }).map((t) => t.eintrag.begriff);
     return {
       begriff: fach || String(begriff).trim(),
       kurz: fach
         ? `„${String(begriff).trim()}“ heißt in der Fachsprache ${fach}.`
-        : `Zu „${String(begriff).trim()}“ liegt in der lokalen Wissensbasis noch keine ausführliche Erklärung vor.`,
+        : `Zu „${String(begriff).trim()}“ gibt es in der Fachdatenbank noch keinen eigenen Eintrag.`,
       abschnitte: [
         {
           titel: 'Hinweis',
           text:
-            'Der Fachmodus offline enthält nur die wichtigsten Bauteile und Vorgänge. ' +
-            'Sobald auf dem Server ein KI-Schlüssel hinterlegt ist, erklärt die KI jeden Begriff ausführlich ' +
-            'und beantwortet auch Rückfragen.',
+            'Die Fachdatenbank deckt die wichtigsten Themen der Anlagenmechanik SHK und der Versorgungstechnik ab. ' +
+            'Sobald auf dem Server ein KI-Zugang hinterlegt ist, beantwortet die KI zusätzlich jede freie Frage.',
           punkte: [],
         },
       ],
       normen: n.normen,
-      stichworte: [],
+      stichworte: aehnlich,
       quelle: 'offline',
     };
   }
 
-  const abschnitte = [
-    { titel: 'Funktionsprinzip', text: w.funktion, punkte: [] },
-    { titel: 'Aufbau', text: '', punkte: w.aufbau || [] },
-    { titel: 'Einsatz und Einbau', text: '', punkte: w.einsatz || [] },
-  ];
-  if (w.hinweise?.length) abschnitte.push({ titel: 'Praxishinweise', text: '', punkte: w.hinweise });
-  if (w.stoerungen?.length) abschnitte.push({ titel: 'Typische Fehlerbilder', text: '', punkte: w.stoerungen });
-
   return {
-    begriff: w.begriff,
-    kurz: w.kurz,
-    abschnitte,
-    normen: w.normen || [],
-    stichworte: [],
+    begriff: eintrag.begriff,
+    kurz: eintrag.kurz,
+    abschnitte: abschnitteAus(eintrag),
+    normen: eintrag.normen || [],
+    stichworte: (eintrag.verwandt || [])
+      .map((id) => findeWissen(id)?.begriff)
+      .filter(Boolean),
     quelle: 'offline',
   };
 }
 
 export function offlineVertiefung(begriff, frage) {
-  const w = findeWissen(begriff) || findeWissen(frage);
-  const f = String(frage || '').toLowerCase();
+  const suchtext = `${begriff || ''} ${frage || ''}`.trim();
+  const eintrag = findeWissen(frage) || findeWissen(begriff) || findeWissen(suchtext);
+  const f = schluessel(frage || '');
 
-  if (w && /zu\s*viel\s*druck|überdruck|druck\s*steigt|zu\s*hoher\s*druck/.test(f) && w.ueberdruck) {
-    return { titel: 'Verhalten bei zu hohem Druck', text: w.ueberdruck, punkte: [], quelle: 'offline' };
+  // Hinterlegte Antworten auf typische Rückfragen bevorzugen
+  const kandidaten = [eintrag, ...sucheWissen(suchtext, { grenze: 3 }).map((t) => t.eintrag)].filter(Boolean);
+  for (const k of kandidaten) {
+    for (const v of k.vertiefungen || []) {
+      const woerterFrage = f.split(' ').filter((w) => w.length > 3);
+      const vs = schluessel(v.frage);
+      const treffer = woerterFrage.filter((w) => vs.includes(w)).length;
+      if (treffer >= 2 || (f && vs.includes(f))) {
+        return { titel: v.frage, text: v.text, punkte: [], quelle: 'offline' };
+      }
+    }
   }
-  if (w) {
+
+  if (eintrag) {
     return {
-      titel: `${w.begriff} – ausführlich`,
-      text: `${w.kurz}\n\n${w.funktion}`,
-      punkte: [...(w.hinweise || []), ...(w.stoerungen || [])],
+      titel: `${eintrag.begriff} – ausführlich`,
+      text: `${eintrag.kurz}\n\n${eintrag.funktion}`,
+      punkte: [...(eintrag.werte || []), ...(eintrag.hinweise || []), ...(eintrag.stoerungen || [])],
       quelle: 'offline',
     };
   }
+
   return {
     titel: 'Vertiefung nicht möglich',
     text:
-      'Für diese Rückfrage ist die KI nötig. Im Fachmodus offline stehen nur die Grundlagen der ' +
-      'lokalen Wissensbasis zur Verfügung.',
+      'Zu dieser Rückfrage gibt es in der Fachdatenbank keinen passenden Eintrag. ' +
+      'Mit hinterlegtem KI-Zugang beantwortet die KI auch freie Fragen.',
     punkte: [],
     quelle: 'offline',
   };

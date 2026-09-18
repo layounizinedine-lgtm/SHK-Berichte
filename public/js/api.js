@@ -42,6 +42,15 @@ export const api = {
   berichtSpeichern: (id, daten) => anfrage(`/api/berichte/${encodeURIComponent(id)}`, { methode: 'PUT', daten }),
   berichtLoeschen: (id) => anfrage(`/api/berichte/${encodeURIComponent(id)}`, { methode: 'DELETE' }),
 
+  wissen: (suche, bereich) => {
+    const p = new URLSearchParams();
+    if (suche) p.set('suche', suche);
+    if (bereich) p.set('bereich', bereich);
+    const q = p.toString();
+    return anfrage(`/api/wissen${q ? `?${q}` : ''}`);
+  },
+  wissenEintrag: (id) => anfrage(`/api/wissen/${encodeURIComponent(id)}`),
+
   ki: {
     fachsprache: (text) => anfrage('/api/ki/fachsprache', { methode: 'POST', daten: { text } }),
     berichtsheft: (transkript, kontext) =>

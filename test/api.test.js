@@ -187,3 +187,35 @@ test('KI-Endpunkte antworten im Fachmodus offline', async () => {
   const leer = await ruf('/api/ki/erklaerung', { methode: 'POST', daten: { begriff: '' } });
   assert.equal(leer.status, 400);
 });
+
+test('Fachdatenbank ist über die Schnittstelle abrufbar', async () => {
+  const ruf = klient();
+  assert.equal((await ruf('/api/wissen')).status, 401, 'ohne Anmeldung gesperrt');
+
+  await ruf('/api/auth/registrieren', {
+    methode: 'POST',
+    daten: { email: `wissen${Date.now()}@example.de`, passwort: 'passwort1234' },
+  });
+
+  const liste = await ruf('/api/wissen');
+  assert.equal(liste.status, 200);
+  assert.ok(liste.inhalt.eintraege.length >= 100);
+  assert.ok(liste.inhalt.statistik.gesamt >= 100);
+  assert.ok(liste.inhalt.bereiche.sanitaer);
+
+  const gefiltert = await ruf('/api/wissen?bereich=gas');
+  assert.ok(gefiltert.inhalt.eintraege.every((e) => e.bereich === 'gas'));
+
+  const gesucht = await ruf('/api/wissen?suche=Legionellen');
+  assert.equal(gesucht.inhalt.eintraege[0].id, 'legionellen');
+  assert.ok(gesucht.inhalt.eintraege.length <= 25);
+
+  const eintrag = await ruf('/api/wissen/druckminderer');
+  assert.equal(eintrag.status, 200);
+  assert.equal(eintrag.inhalt.eintrag.begriff, 'Druckminderer');
+  assert.ok(eintrag.inhalt.eintrag.werte.length >= 1);
+  assert.ok(eintrag.inhalt.eintrag.verwandteEintraege.length >= 2);
+
+  assert.equal((await ruf('/api/wissen/gibtesnicht')).status, 404);
+  assert.equal((await ruf('/api/wissen?bereich=quatsch')).status, 400);
+});

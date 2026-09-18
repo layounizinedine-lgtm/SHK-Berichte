@@ -58,6 +58,19 @@ export async function ansichtStart(behaelter) {
     ]),
   );
 
+  behaelter.append(
+    el('div.raster', { style: 'margin-top:16px' }, [
+      kachel({
+        pfad: '#/lexikon',
+        zeichen: '📚',
+        titel: 'Nachschlagen in der Fachdatenbank',
+        text:
+          'Sanitär, Heizung, Gas, Lüftung, Klima und Versorgungstechnik: Funktionsprinzipien, ' +
+          'Kennwerte, Formeln, Regelwerke und typische Fehlerbilder – auch ohne KI verfügbar.',
+      }),
+    ]),
+  );
+
   const listenBereich = el('section.karte', { style: 'margin-top:20px' }, [
     el('div.karte-kopf', {}, [el('h2', { text: 'Meine Berichte' })]),
     ladeAnzeige('Berichte werden geladen …'),

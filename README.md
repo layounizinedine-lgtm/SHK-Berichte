@@ -23,6 +23,7 @@ Fachtext mit korrekten Nennweiten, Werkzeug- und Materialbezeichnungen.
 | **Berichtsheft** | Ganze Woche einsprechen. Die KI erkennt Wochentage, ordnet die Tätigkeiten zu und formuliert im Nominalstil. Material-, Werkzeug- und Normenliste pro Tätigkeit. |
 | **Fachbericht** | Einleitung, Arbeitsschritte, **Materialliste**, **Werkzeugliste**, Arbeitssicherheit, Regelwerke, **Erklärungen** und Fazit – aus einem Diktat. |
 | **Erklären lassen** | „Erkläre einen Druckminderer“ → Aufbau, Funktionsprinzip, Einsatz, Einstellwerte, Fehlerbilder, Normen. Auf Wunsch in drei Stufen ausführlicher. |
+| **Nachschlagen** | Eingebaute **Fachdatenbank mit über 120 Einträgen** zu Sanitär, Heizung, Gas, Lüftung/Klima/Kälte, Versorgungstechnik und Grundlagen – durchsuchbar per Sprache, mit Kennwerten, Formeln, Regelwerken und Querverweisen. Funktioniert auch ohne KI. |
 | **Rückfragen** | „Erläutere was genau passiert, wenn zu viel Druck kommt“ → gezielte Vertiefung genau zu dieser Frage, beliebig oft. |
 | **Zeichnung** | Passende Prinzipskizze/Strangschema als SVG – per Sprache angefordert, mit Legende, druckbar. |
 | **Bearbeiten** | Jeden Punkt antippen und ändern, mehrere auswählen und löschen, einzelne Punkte „Genauer“ machen, Begriffe markieren und erklären lassen. |
@@ -71,14 +72,38 @@ Ohne Schlüssel läuft die App vollständig weiter – nur ohne KI-Feinschliff:
   schreibt Umgangssprache in Fachbegriffe um: „Flex“ → Winkelschleifer,
   „22er Kupfer“ → Kupferrohr 22 × 1,0 mm, „halbzoll“ → DN 15 (1/2 Zoll),
   „100er SML“ → SML-Abflussrohr DN 100.
-- Erklärungen kommen aus einer **lokalen Wissensbasis** (Druckminderer, Sicherheitsventil,
-  MAG, Systemtrenner, Thermostatventil, hydraulischer Abgleich, Legionellen, SML,
-  Pressfitting, Druckprobe, Geruchsverschluss, Wärmepumpe, Brennwert, Fußbodenheizung,
-  Hebeanlage, Zirkulation, TRGI …).
+- Erklärungen kommen aus der **eingebauten Fachdatenbank** mit über 120 Einträgen zum
+  gesamten Berufsfeld (siehe unten) – inklusive Kennwerten, Formeln und Regelwerken.
 - Zeichnungen werden aus den erkannten Bauteilen als Prinzipskizze aufgebaut.
 
 Fällt die KI während des Betriebs aus, schaltet die App automatisch auf diesen Modus um
 und weist im Bericht darauf hin.
+
+---
+
+## Die Fachdatenbank
+
+Die App bringt ein strukturiertes Nachschlagewerk des Berufsfeldes mit (`server/ai/wissen/`).
+Es ist die Grundlage für die Erklärungen ohne KI – und wird zugleich als Faktenblock an die
+KI-Prompts angehängt, damit KI-Texte dieselben Werte, Formeln und Regelwerke verwenden.
+
+| Bereich | Inhalte (Auszug) |
+| --- | --- |
+| **Grundlagen und Werkstoffe** | Kupfer, Edelstahl, C-Stahl, Gewinderohr, Verbundrohr, PE-X, Dichtstoffe · Pressen, Weich-/Hartlöten, Gewinde, Steckmuffe · Befestigung, Wärmedehnung, Korrosion · Dämmung nach GEG, Brand- und Schallschutz · Wärme-, Hydraulik- und Grundformeln · Elektrotechnik, Arbeitssicherheit, Gefahrstoffe, Berichtsheft und Gesellenprüfung |
+| **Sanitär- und Trinkwassertechnik** | Trinkwasserhygiene, Legionellen, Hauswasserstation, Druckminderer, Rückflussverhinderer, Sicherungsarmaturen nach DIN EN 1717, Systemtrenner, Wasserzähler, Filter, Trinkwassererwärmer, Frischwasserstation, Durchlauferhitzer, Zirkulation, Rohrnetzberechnung, Armaturen, Enthärtung, Dichtheitsprüfung, Spülung · Entwässerung mit SML, HT, KG, Fallleitung und Lüftung, Geruchsverschluss, Rückstau, Hebeanlage, Regenentwässerung · Vorwandinstallation, Sanitärobjekte, Barrierefreiheit, Leckagesuche |
+| **Heizungstechnik** | Anlagenaufbau, Heizlast, Brennwert, Wärmepumpe, Öl, Biomasse, Solarthermie · Sicherheitsventil, Ausdehnungsgefäß, Pumpe, Mischer, Pufferspeicher, hydraulische Weiche · Thermostat- und Strangregulierventile, hydraulischer Abgleich · Heizkörper, Fußbodenheizung, Verteiler, Funktionsheizen · Heizkurve, Heizungswasser nach VDI 2035, Entlüftung, Inbetriebnahme, Optimierung |
+| **Gastechnik** | TRGI-Gasinstallation, Belastungs-, Dichtheits- und Gebrauchsfähigkeitsprüfung, Gerätearten A/B/C, Gasströmungswächter, TAE, Verbrennungsluft, Abgasanlage, Abgasmessung, Kondensat und Neutralisation, Flüssiggas, Verhalten bei Gasgeruch |
+| **Lüftung, Klima und Kälte** | Wohnungslüftung nach DIN 1946-6, RLT-Anlagen, Wärmerückgewinnung, Kanalnetz, Filter nach ISO 16890, Hygiene nach VDI 6022, Schalldämpfer, Kühllast, Kältekreis und Kältemittel, Splitanlagen, h,x-Diagramm, Küchen- und Bad-Entlüftung |
+| **Versorgungs- und Anlagentechnik** | Fernwärme und Übergabestation, Druckerhöhung, Regenwassernutzung, Druckluft, MSR- und Gebäudeautomation, Wärmemengenzähler, Fett- und Leichtflüssigkeitsabscheider, Schwimmbadtechnik, Löschwasseranlagen, Instandhaltung nach DIN 31051, Kundendienst, Dokumentation, GEG und Förderung, PV mit Wärmepumpe |
+
+Jeder Eintrag enthält Kurzdefinition, Funktionsprinzip, Aufbau, Einsatz, Kennwerte,
+Praxishinweise, typische Fehlerbilder, Regelwerke und Querverweise – viele zusätzlich
+Berechnungsformeln und ausformulierte Antworten auf typische Rückfragen
+(z. B. „Was passiert, wenn zu viel Druck kommt?“).
+
+**Erweitern:** Neue Einträge werden einfach in die passende Datei unter `server/ai/wissen/`
+eingetragen – gleiche Struktur, fertig. Die Tests prüfen Vollständigkeit, eindeutige
+Schlüssel und dass alle Querverweise auf vorhandene Einträge zeigen.
 
 ---
 
@@ -127,7 +152,7 @@ server/
   db.js               Speicher: node:sqlite, sonst JSON-Datei
   auth.js             Registrierung, Anmeldung, scrypt-Passwörter, Sitzungen
   http.js             JSON, Cookies, statische Dateien, Ratenbegrenzung
-  routes/             /api/status, /api/auth/*, /api/berichte/*, /api/ki/*
+  routes/             /api/status, /api/auth/*, /api/berichte/*, /api/wissen/*, /api/ki/*
   ai/
     glossar.js        SHK-Fachglossar, Wandstärken, Zolltabelle, Wissensbasis
     fachsprache.js    Umschreibung Umgangssprache → Fachsprache
@@ -136,11 +161,12 @@ server/
     tasks.js          Fachaufgaben mit Rückfall auf den Fachmodus offline
     offline.js        Erzeugung ohne KI + lokale Befehlserkennung
     svg.js            SVG-Absicherung und Offline-Prinzipskizze
+    wissen/           Fachdatenbank: index.js (Suche, Faktenblock) + je Bereich eine Datei
 public/
   index.html          App-Hülle
   css/styles.css      Gestaltung inkl. Hell-/Dunkelmodus und Druckansicht
   js/                 Module: api, ui, speech, store, components
-  js/views/           Anmeldung, Start, Berichtsheft, Fachbericht, Wissen, Konto
+  js/views/           Anmeldung, Start, Berichtsheft, Fachbericht, Wissen, Nachschlagen, Konto
 test/                 Tests (node --test)
 data/                 Datenbank (wird angelegt, nicht im Repository)
 ```
@@ -155,9 +181,10 @@ Keine Fremdbibliotheken, kein Bundler: nur Node-Bordmittel und ES-Module im Brow
 npm test
 ```
 
-32 Tests: Fachsprache-Engine, Fachmodus offline, Sprachbefehle, SVG-Absicherung,
-Schnittstelle (Konto, Berichte, Zugriffsschutz) und der KI-Pfad gegen einen
-nachgebildeten API-Server (Anfrageaufbau, Auswertung, Rückfallebene).
+44 Tests: Fachsprache-Engine, Fachdatenbank (Datenqualität, Suche, Faktenblock),
+Fachmodus offline, Sprachbefehle, SVG-Absicherung, Schnittstelle (Konto, Berichte,
+Nachschlagen, Zugriffsschutz) und der KI-Pfad gegen einen nachgebildeten API-Server
+(Anfrageaufbau, Auswertung, Rückfallebene).
 
 ---
 

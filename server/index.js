@@ -12,6 +12,7 @@ import { aktuellerBenutzer } from './auth.js';
 import { authRouten } from './routes/auth.js';
 import { berichtRouten } from './routes/berichte.js';
 import { kiRouten } from './routes/ki.js';
+import { wissenRouten } from './routes/wissen.js';
 
 const SICHERHEITS_HEADER = {
   'X-Content-Type-Options': 'nosniff',
@@ -62,7 +63,7 @@ const server = http.createServer(async (req, res) => {
       const benutzer = aktuellerBenutzer(req);
 
       // Jede Routengruppe liefert false, wenn sie nicht zuständig ist.
-      for (const gruppe of [authRouten, berichtRouten, kiRouten]) {
+      for (const gruppe of [authRouten, berichtRouten, wissenRouten, kiRouten]) {
         const ergebnis = await gruppe(req, res, pfad, benutzer);
         if (ergebnis !== false || res.writableEnded) return undefined;
       }

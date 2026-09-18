@@ -8,7 +8,8 @@
  * fuer den KI-Prompt, damit die KI die Betriebsbegriffe sicher trifft.
  */
 
-import { GLOSSAR, WANDSTAERKEN, ZOLL_DN, ZOLL_SPRACHE, WISSEN, GRUNDWERKZEUG } from './glossar.js';
+import { GLOSSAR, WANDSTAERKEN, ZOLL_DN, ZOLL_SPRACHE, GRUNDWERKZEUG } from './glossar.js';
+import { findeWissen, sucheWissen, faktenBlock } from './wissen/index.js';
 
 // Platzhalter-Marker: Zeichen, die in normalem Text nicht vorkommen und von
 // keiner Folgeregel getroffen werden (verhindert Mehrfachersetzung).
@@ -319,68 +320,4 @@ export function promptHinweise(eingabe) {
   return ['Verbindliche Begriffszuordnung aus dem Betriebsglossar (so verwenden):', ...zeilen.slice(0, 40)].join('\n');
 }
 
-const WISSEN_ALIAS = {
-  'membran ausdehnungsgefäß': 'ausdehnungsgefaess',
-  ausdehnungsgefäss: 'ausdehnungsgefaess',
-  ausdehnungsgefäß: 'ausdehnungsgefaess',
-  mag: 'ausdehnungsgefaess',
-  sv: 'sicherheitsventil',
-  überdruckventil: 'sicherheitsventil',
-  rückschlagventil: 'rueckflussverhinderer',
-  rückflussverhinderer: 'rueckflussverhinderer',
-  rückschlagklappe: 'rueckflussverhinderer',
-  abgleich: 'hydraulischer_abgleich',
-  siphon: 'geruchsverschluss',
-  geruchverschluss: 'geruchsverschluss',
-  geruchsverschluss: 'geruchsverschluss',
-  legionelle: 'legionellen',
-  'w 551': 'legionellen',
-  fbh: 'fussbodenheizung',
-  fußbodenheizung: 'fussbodenheizung',
-  flächenheizung: 'fussbodenheizung',
-  therme: 'brennwert',
-  gastherme: 'brennwert',
-  brennwertkessel: 'brennwert',
-  brennwertgerät: 'brennwert',
-  wp: 'waermepumpe',
-  wärmepumpe: 'waermepumpe',
-  druckprobe: 'druckprobe',
-  dichtheitsprüfung: 'druckprobe',
-  abdrücken: 'druckprobe',
-  abgedrückt: 'druckprobe',
-  pressverbindung: 'pressfitting',
-  pressfitting: 'pressfitting',
-  verpressen: 'pressfitting',
-  gasinstallation: 'trgi',
-  trgi: 'trgi',
-  zirkulation: 'zirkulation',
-  hebeanlage: 'hebeanlage',
-  systemtrenner: 'systemtrenner',
-  thermostatventil: 'thermostatventil',
-  thermostat: 'thermostatventil',
-  druckminderer: 'druckminderer',
-  sml: 'sml',
-};
-
-/** Sucht einen Wissenseintrag zu einem Begriff (für den Offline-Modus). */
-export function findeWissen(begriff) {
-  const b = String(begriff || '')
-    .toLowerCase()
-    .replace(/[^a-zäöüß0-9 ]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-  if (!b) return null;
-
-  for (const [alias, key] of Object.entries(WISSEN_ALIAS)) {
-    if (b.includes(alias)) return WISSEN[key];
-  }
-  for (const [key, wert] of Object.entries(WISSEN)) {
-    const norm = key.replace(/_/g, ' ');
-    if (b.includes(norm)) return wert;
-    const haupt = wert.begriff.toLowerCase().split(/[\s(/]/)[0];
-    if (haupt.length > 4 && b.includes(haupt)) return wert;
-  }
-  return null;
-}
-
-export { GRUNDWERKZEUG, WISSEN };
+export { GRUNDWERKZEUG, findeWissen, sucheWissen, faktenBlock };
