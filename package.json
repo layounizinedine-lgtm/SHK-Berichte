@@ -1,0 +1,24 @@
+{
+  "name": "shk-berichte",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sprachgesteuerte App für Berichtshefte und Fachberichte für Anlagenmechaniker SHK – mit KI-Fachsprache, Materiallisten, Erklärungen und Zeichnungen.",
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test": "node --test test/*.test.js"
+  },
+  "keywords": [
+    "shk",
+    "anlagenmechaniker",
+    "berichtsheft",
+    "fachbericht",
+    "ausbildung",
+    "spracherkennung"
+  ],
+  "license": "MIT"
+}

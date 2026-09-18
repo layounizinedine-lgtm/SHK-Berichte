@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>SHK-Berichte – Berichtsheft &amp; Fachbericht per Sprache</title>
+    <meta
+      name="description"
+      content="Berichtshefte und Fachberichte für Anlagenmechaniker SHK einsprechen – die KI formuliert in Fachsprache, erstellt Material- und Werkzeuglisten, Erklärungen und Zeichnungen."
+    />
+    <meta name="theme-color" content="#0b6fb3" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <header class="kopf">
+      <div class="kopf-inner">
+        <a class="marke" href="#/">
+          <span class="marke-zeichen" aria-hidden="true">⚒</span>
+          <span>SHK&#8209;Berichte</span>
+        </a>
+        <nav class="kopf-nav" id="haupt-nav" aria-label="Hauptbereiche"></nav>
+        <div class="kopf-rechts">
+          <button class="knopf knopf-leer knopf-klein" id="thema-schalter" type="button" title="Hell / Dunkel umschalten">
+            <span id="thema-zeichen" aria-hidden="true">◐</span>
+            <span class="nicht-mobil" id="thema-text">Design</span>
+          </button>
+          <button class="knopf knopf-leer knopf-klein" id="konto-knopf" type="button">Konto</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="app" aria-live="polite">
+      <div class="arbeitet"><span class="laden"></span> App wird geladen …</div>
+    </main>
+
+    <div id="meldungen" role="status" aria-live="polite"></div>
+    <div id="erklaer-blase">
+      <button class="knopf knopf-haupt knopf-klein" id="erklaer-blase-knopf" type="button">Begriff erklären</button>
+    </div>
+
+    <dialog id="dialog"><div class="dialog-inner" id="dialog-inhalt"></div></dialog>
+
+    <script type="module" src="/js/app.js"></script>
+  </body>
+</html>

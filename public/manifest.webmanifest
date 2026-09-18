@@ -1,0 +1,14 @@
+{
+  "name": "SHK-Berichte – Berichtsheft & Fachbericht",
+  "short_name": "SHK-Berichte",
+  "description": "Berichtshefte und Fachberichte für Anlagenmechaniker SHK per Sprache erstellen.",
+  "lang": "de",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0c1014",
+  "theme_color": "#0b6fb3",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
