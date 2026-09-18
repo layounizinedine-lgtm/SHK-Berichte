@@ -36,7 +36,26 @@ dem Server – in der App wird nie etwas eingegeben oder konfiguriert.
 
 ---
 
-## Schnellstart
+## Zwei Wege, die App zu nutzen
+
+| | Web-App (claude.ai) | Eigener Server |
+| --- | --- | --- |
+| Start | Link öffnen, nichts einrichten | `npm start` auf eigenem Rechner/Server |
+| KI | über das Claude-Konto des Nutzers | über den Serverschlüssel in der `.env` |
+| Speicherung | privat je Nutzer in der Artifact-Datenbank | SQLite im eigenen Konto |
+| Diktat | Browser-Spracherkennung (im eingebetteten Fenster teils gesperrt) | voll, mit eigener Mikrofon-Freigabe |
+| Aufbau | eine Seite aus `webapp/` (`node webapp/build.mjs`) | `server/` + `public/` |
+
+Beide teilen sich dieselbe Fachsprache-Engine und dieselbe Fachdatenbank aus `server/ai/` –
+das Build-Skript bündelt sie für die Web-App in eine einzelne HTML-Datei.
+
+```bash
+node webapp/build.mjs      # erzeugt webapp/dist/shk-berichte.html
+```
+
+---
+
+## Schnellstart (eigener Server)
 
 Voraussetzung: **Node.js 20 oder neuer** (empfohlen 22+). Keine weiteren Abhängigkeiten,
 kein `npm install`, kein Build.
@@ -167,6 +186,10 @@ public/
   css/styles.css      Gestaltung inkl. Hell-/Dunkelmodus und Druckansicht
   js/                 Module: api, ui, speech, store, components
   js/views/           Anmeldung, Start, Berichtsheft, Fachbericht, Wissen, Nachschlagen, Konto
+webapp/
+  vorlage.html        Web-App als eine Seite (Oberfläche + Plattform-Anbindung)
+  build.mjs           bündelt Engine und Fachdatenbank in die Seite
+  dist/               erzeugte Seite zum Veröffentlichen
 test/                 Tests (node --test)
 data/                 Datenbank (wird angelegt, nicht im Repository)
 ```

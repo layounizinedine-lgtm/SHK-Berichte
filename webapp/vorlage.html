@@ -1,0 +1,3020 @@
+<title>SHK-Berichte</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+/>
+
+<style>
+  /* ===================================================================
+     SHK-Berichte – Blaupause: kühles Papier, Tiefdruckblau, Kupfer.
+     Datenblatt-Anmutung: Haarlinien, Versallabels in Mono, Zahlen tabellarisch.
+     =================================================================== */
+
+  :root {
+    --papier: #eaeff4;
+    --flaeche: #ffffff;
+    --flaeche-2: #f4f7fa;
+    --flaeche-3: #e7edf3;
+    --tinte: #0f2230;
+    --tinte-leise: #55697b;
+    --linie: #d2dce5;
+    --linie-stark: #b3c3d1;
+    --blau: #15618f;
+    --blau-flaeche: #e2eef7;
+    --blau-text: #ffffff;
+    --kupfer: #a2571f;
+    --kupfer-flaeche: #f8ebe0;
+    --patina: #1a7560;
+    --patina-flaeche: #e0f1ec;
+    --rot: #ad3527;
+    --rot-flaeche: #fbe9e6;
+    --schatten: 0 1px 1px rgba(15, 34, 48, 0.04), 0 10px 24px rgba(15, 34, 48, 0.07);
+    --schatten-hoch: 0 2px 6px rgba(15, 34, 48, 0.1), 0 22px 48px rgba(15, 34, 48, 0.16);
+    --rund: 12px;
+    --rund-klein: 8px;
+    --breite: 1180px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      --papier: #0b141c;
+      --flaeche: #131f29;
+      --flaeche-2: #18262f;
+      --flaeche-3: #1f3140;
+      --tinte: #e4edf4;
+      --tinte-leise: #91a5b5;
+      --linie: #223545;
+      --linie-stark: #31506a;
+      --blau: #61aee4;
+      --blau-flaeche: #14303f;
+      --blau-text: #071620;
+      --kupfer: #dd9058;
+      --kupfer-flaeche: #2f2118;
+      --patina: #48bd9a;
+      --patina-flaeche: #102d27;
+      --rot: #ef8175;
+      --rot-flaeche: #30191a;
+      --schatten: 0 1px 1px rgba(0, 0, 0, 0.5), 0 10px 26px rgba(0, 0, 0, 0.42);
+      --schatten-hoch: 0 2px 8px rgba(0, 0, 0, 0.55), 0 24px 52px rgba(0, 0, 0, 0.55);
+    }
+  }
+
+  :root[data-theme='dark'] {
+    --papier: #0b141c;
+    --flaeche: #131f29;
+    --flaeche-2: #18262f;
+    --flaeche-3: #1f3140;
+    --tinte: #e4edf4;
+    --tinte-leise: #91a5b5;
+    --linie: #223545;
+    --linie-stark: #31506a;
+    --blau: #61aee4;
+    --blau-flaeche: #14303f;
+    --blau-text: #071620;
+    --kupfer: #dd9058;
+    --kupfer-flaeche: #2f2118;
+    --patina: #48bd9a;
+    --patina-flaeche: #102d27;
+    --rot: #ef8175;
+    --rot-flaeche: #30191a;
+    --schatten: 0 1px 1px rgba(0, 0, 0, 0.5), 0 10px 26px rgba(0, 0, 0, 0.42);
+    --schatten-hoch: 0 2px 8px rgba(0, 0, 0, 0.55), 0 24px 52px rgba(0, 0, 0, 0.55);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--papier);
+    color: var(--tinte);
+    font-family: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-size: 15.5px;
+    line-height: 1.55;
+  }
+
+  h1, h2, h3 {
+    font-family: 'IBM Plex Sans Condensed', 'IBM Plex Sans', system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    margin: 0 0 0.35em;
+    text-wrap: balance;
+  }
+  h1 { font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.3rem); }
+  h2 { font-size: clamp(1.15rem, 1rem + 0.7vw, 1.45rem); }
+  h3 { font-size: 1.05rem; }
+  p { margin: 0 0 0.75em; }
+  a { color: var(--blau); }
+
+  .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+  .leise { color: var(--tinte-leise); }
+  .klein { font-size: 0.86rem; }
+
+  /* ------------------------------------------------------------- Kopf */
+  .kopf {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 40;
+    background: color-mix(in srgb, var(--flaeche) 90%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--linie);
+  }
+  .kopf-innen {
+    max-width: var(--breite);
+    margin: 0 auto;
+    padding: 9px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+  .marke {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.08rem;
+    color: var(--tinte);
+    text-decoration: none;
+    letter-spacing: 0.01em;
+  }
+  .marke svg { display: block; }
+  .nav {
+    display: flex;
+    gap: 3px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    order: 3;
+    width: 100%;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a {
+    padding: 6px 11px;
+    border-radius: 999px;
+    text-decoration: none;
+    color: var(--tinte-leise);
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    background: var(--flaeche-3);
+  }
+  .nav a[aria-current='page'] { background: var(--blau); color: var(--blau-text); }
+  .kopf-rechts { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+
+  @media (min-width: 760px) {
+    .nav { order: 0; width: auto; background: none; }
+    .nav a { background: none; }
+    .nav a:hover { background: var(--flaeche-3); color: var(--tinte); }
+  }
+
+  main {
+    max-width: var(--breite);
+    margin: 0 auto;
+    padding-block: 20px 120px;
+    padding-inline: 16px;
+  }
+
+  /* ------------------------------------------------------------- Bausteine */
+  .karte {
+    background: var(--flaeche);
+    border: 1px solid var(--linie);
+    border-radius: var(--rund);
+    box-shadow: var(--schatten);
+    padding: 16px;
+  }
+  .karte + .karte { margin-top: 14px; }
+
+  .karte-kopf { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  .karte-kopf h2, .karte-kopf h3 { margin: 0; }
+  .karte-kopf .rechts { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--tinte-leise);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 8px;
+  }
+  .label::after { content: ''; flex: 1; height: 1px; background: var(--linie); }
+
+  .raster { display: grid; gap: 14px; }
+  @media (min-width: 820px) {
+    .raster-2 { grid-template-columns: 1fr 1fr; }
+    .raster-3 { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  button { font: inherit; cursor: pointer; }
+  .knopf {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: 1px solid var(--linie-stark);
+    background: var(--flaeche);
+    color: var(--tinte);
+    border-radius: var(--rund-klein);
+    padding: 8px 13px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.14s ease, border-color 0.14s ease, transform 0.06s ease;
+  }
+  .knopf:hover { background: var(--flaeche-3); }
+  .knopf:active { transform: translateY(1px); }
+  .knopf:disabled { opacity: 0.5; cursor: not-allowed; }
+  .knopf-haupt { background: var(--blau); border-color: var(--blau); color: var(--blau-text); font-weight: 600; }
+  .knopf-haupt:hover { background: color-mix(in srgb, var(--blau) 86%, #000); }
+  .knopf-kupfer { background: var(--kupfer); border-color: var(--kupfer); color: #fff; }
+  .knopf-kupfer:hover { background: color-mix(in srgb, var(--kupfer) 86%, #000); }
+  .knopf-still { border-color: transparent; background: transparent; color: var(--tinte-leise); }
+  .knopf-still:hover { background: var(--flaeche-3); color: var(--tinte); }
+  .knopf-gefahr { color: var(--rot); border-color: color-mix(in srgb, var(--rot) 40%, var(--linie)); }
+  .knopf-gefahr:hover { background: var(--rot-flaeche); }
+  .knopf-klein { padding: 4px 8px; font-size: 0.8rem; border-radius: 6px; }
+  .knopf-reihe { display: flex; gap: 7px; flex-wrap: wrap; }
+
+  input[type='text'], input[type='search'], textarea, select {
+    width: 100%;
+    font: inherit;
+    color: var(--tinte);
+    background: var(--flaeche-2);
+    border: 1px solid var(--linie-stark);
+    border-radius: var(--rund-klein);
+    padding: 9px 11px;
+  }
+  textarea { resize: vertical; min-height: 88px; line-height: 1.5; }
+  :focus-visible { outline: 2px solid var(--blau); outline-offset: 2px; }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--flaeche-3);
+    border: 1px solid var(--linie);
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 0.8rem;
+    color: var(--tinte);
+    text-decoration: none;
+  }
+  .chip-liste { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip button { border: 0; background: none; color: var(--tinte-leise); padding: 0 1px; line-height: 1; font-size: 0.95rem; }
+  .chip button:hover { color: var(--rot); }
+  .chip-blau { background: var(--blau-flaeche); border-color: color-mix(in srgb, var(--blau) 30%, transparent); color: var(--blau); }
+  .chip-kupfer { background: var(--kupfer-flaeche); border-color: color-mix(in srgb, var(--kupfer) 30%, transparent); color: var(--kupfer); }
+  .chip-patina { background: var(--patina-flaeche); border-color: color-mix(in srgb, var(--patina) 30%, transparent); color: var(--patina); }
+
+  /* ------------------------------------------------------------- Diktat */
+  .diktat { border: 1px solid var(--linie); border-radius: var(--rund); background: var(--flaeche); box-shadow: var(--schatten); padding: 15px; }
+  .diktat-kopf { display: flex; align-items: center; gap: 13px; flex-wrap: wrap; }
+  .mikro {
+    width: 58px; height: 58px; border-radius: 50%; border: 0; flex: none;
+    background: var(--blau); color: var(--blau-text);
+    display: grid; place-items: center;
+    box-shadow: 0 5px 16px color-mix(in srgb, var(--blau) 34%, transparent);
+  }
+  .mikro svg { width: 24px; height: 24px; }
+  .mikro[data-aktiv='true'] { background: var(--rot); color: #fff; animation: puls 1.7s ease-in-out infinite; }
+  @keyframes puls {
+    0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--rot) 50%, transparent); }
+    55% { box-shadow: 0 0 0 13px rgba(0, 0, 0, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) { .mikro[data-aktiv='true'] { animation: none; } }
+  .diktat-text { flex: 1 1 240px; min-width: 0; }
+  .zwischen { min-height: 1.3em; font-size: 0.85rem; color: var(--tinte-leise); font-style: italic; }
+
+  /* ------------------------------------------------------------- Punkte */
+  .punkte { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+  .punkt {
+    display: flex; align-items: flex-start; gap: 9px;
+    background: var(--flaeche-2); border: 1px solid var(--linie);
+    border-radius: var(--rund-klein); padding: 9px 11px;
+  }
+  .punkt[data-gewaehlt='true'] { border-color: var(--blau); background: var(--blau-flaeche); }
+  .punkt input[type='checkbox'] { margin-top: 4px; width: 17px; height: 17px; accent-color: var(--blau); flex: none; }
+  .punkt-inhalt { flex: 1 1 auto; min-width: 0; }
+  .punkt-text { outline: none; word-break: break-word; }
+  .punkt-text[contenteditable='true']:focus { background: var(--flaeche); border-radius: 5px; box-shadow: 0 0 0 2px var(--blau); }
+  .punkt-werkzeuge { display: flex; gap: 3px; flex-wrap: wrap; justify-content: flex-end; flex: none; }
+  .punkt-zusatz {
+    margin-top: 7px; padding: 9px 11px; font-size: 0.9rem;
+    border-left: 3px solid var(--kupfer); background: var(--kupfer-flaeche);
+    border-radius: 0 var(--rund-klein) var(--rund-klein) 0; white-space: pre-wrap;
+  }
+  @media (max-width: 720px) {
+    .punkt { flex-wrap: wrap; }
+    .punkt-inhalt { flex: 1 1 calc(100% - 36px); }
+    .punkt-werkzeuge { width: 100%; justify-content: flex-start; padding-left: 26px; }
+  }
+
+  .auswahl-leiste {
+    position: sticky; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 30;
+    display: flex; gap: 7px; align-items: center; flex-wrap: wrap;
+    background: var(--flaeche); border: 1px solid var(--blau);
+    border-radius: var(--rund); padding: 9px 11px; box-shadow: var(--schatten-hoch); margin: 12px 0;
+  }
+
+  /* ------------------------------------------------------------- Tabellen */
+  .tabelle { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .tabelle th, .tabelle td { text-align: left; padding: 7px 9px; border-bottom: 1px solid var(--linie); vertical-align: top; }
+  .tabelle th {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--tinte-leise); font-weight: 500;
+  }
+  .tabelle-rahmen { overflow-x: auto; }
+
+  /* ------------------------------------------------------------- Kacheln */
+  .kachel {
+    display: block; text-decoration: none; color: inherit;
+    background: var(--flaeche); border: 1px solid var(--linie);
+    border-radius: var(--rund); padding: 16px; box-shadow: var(--schatten);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+  }
+  .kachel:hover { transform: translateY(-2px); box-shadow: var(--schatten-hoch); border-color: var(--blau); }
+  .kachel-zeichen {
+    width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center;
+    margin-bottom: 10px; background: var(--blau-flaeche); color: var(--blau);
+  }
+  .kachel-kupfer .kachel-zeichen { background: var(--kupfer-flaeche); color: var(--kupfer); }
+  .kachel-patina .kachel-zeichen { background: var(--patina-flaeche); color: var(--patina); }
+  .kachel h3 { margin-bottom: 3px; }
+
+  .zeile {
+    display: flex; align-items: center; gap: 11px;
+    padding: 10px 0; border-bottom: 1px solid var(--linie);
+  }
+  .zeile:last-child { border-bottom: 0; }
+  .zeile .titel { font-weight: 600; color: var(--tinte); text-decoration: none; }
+  .zeile .titel:hover { color: var(--blau); }
+
+  /* ------------------------------------------------------------- Hinweise */
+  .hinweis {
+    display: flex; gap: 9px; align-items: flex-start;
+    border: 1px solid var(--linie); background: var(--flaeche-2);
+    border-radius: var(--rund-klein); padding: 10px 12px; font-size: 0.9rem;
+  }
+  .hinweis-info { background: var(--blau-flaeche); border-color: color-mix(in srgb, var(--blau) 28%, transparent); }
+  .hinweis-warnung { background: var(--kupfer-flaeche); border-color: color-mix(in srgb, var(--kupfer) 30%, transparent); }
+  .hinweis-fehler { background: var(--rot-flaeche); border-color: color-mix(in srgb, var(--rot) 30%, transparent); }
+  .hinweis-erfolg { background: var(--patina-flaeche); border-color: color-mix(in srgb, var(--patina) 30%, transparent); }
+
+  .zeichnung { border: 1px solid var(--linie); border-radius: var(--rund-klein); background: var(--flaeche-2); padding: 11px; overflow-x: auto; color: var(--tinte); }
+  .zeichnung svg { max-width: 100%; height: auto; display: block; }
+
+  .leer { text-align: center; padding: 28px 14px; color: var(--tinte-leise); }
+
+  /* ------------------------------------------------------------- Meldungen */
+  #meldungen {
+    position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px)); z-index: 90;
+    display: grid; gap: 7px; width: min(520px, calc(100vw - 28px)); pointer-events: none;
+  }
+  .meldung {
+    background: var(--flaeche); border: 1px solid var(--linie-stark); border-left: 4px solid var(--blau);
+    border-radius: var(--rund-klein); box-shadow: var(--schatten-hoch); padding: 9px 12px; font-size: 0.9rem;
+    animation: rein 0.16s ease;
+  }
+  .meldung-fehler { border-left-color: var(--rot); }
+  .meldung-erfolg { border-left-color: var(--patina); }
+  .meldung-warnung { border-left-color: var(--kupfer); }
+  @keyframes rein { from { opacity: 0; transform: translateY(7px); } }
+
+  .laden {
+    display: inline-block; width: 14px; height: 14px; border: 2px solid currentColor;
+    border-right-color: transparent; border-radius: 50%; animation: dreh 0.7s linear infinite; vertical-align: -2px;
+  }
+  @keyframes dreh { to { transform: rotate(360deg); } }
+  .arbeitet { display: flex; align-items: center; gap: 9px; color: var(--tinte-leise); font-size: 0.9rem; padding: 8px 0; }
+
+  /* ------------------------------------------------------------- Overlay */
+  /* Ausgeblendetes schlägt jede Display-Regel – auch ohne Plattform-Reset */
+  [hidden] { display: none !important; }
+
+  #overlay {
+    position: fixed; inset: 0; z-index: 80; background: rgba(6, 16, 24, 0.55);
+    display: grid; place-items: center; padding: 16px;
+  }
+  .overlay-karte {
+    background: var(--flaeche); border: 1px solid var(--linie); border-radius: var(--rund);
+    box-shadow: var(--schatten-hoch); width: min(660px, 100%); max-height: min(86vh, 900px); overflow-y: auto; padding: 18px;
+  }
+
+  #erklaer-blase { position: absolute; z-index: 60; }
+
+  /* ------------------------------------------------------------- Drucken */
+  @media print {
+    .kopf, .diktat, .auswahl-leiste, .punkt-werkzeuge, .knopf-reihe, #meldungen,
+    .nicht-drucken, .punkt input[type='checkbox'], #erklaer-blase { display: none !important; }
+    body { background: #fff; color: #000; }
+    main { max-width: none; padding: 0; }
+    .karte { border: 0; box-shadow: none; padding: 0; page-break-inside: avoid; }
+    .punkt { background: none; border: 0; padding: 2px 0; }
+  }
+</style>
+
+<header class="kopf">
+  <div class="kopf-innen">
+    <a class="marke" href="#/">
+      <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+        <rect x="0.5" y="0.5" width="25" height="25" rx="7" fill="var(--blau)" />
+        <path d="M6 8.5h9a3.5 3.5 0 0 1 0 7H9.5" stroke="#fff" stroke-width="2" stroke-linecap="round" />
+        <circle cx="19.5" cy="18" r="2.6" stroke="var(--kupfer)" stroke-width="2" fill="none" />
+        <path d="M6 18h8" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity="0.75" />
+      </svg>
+      <span>SHK&#8209;Berichte</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Bereiche"></nav>
+    <div class="kopf-rechts">
+      <span class="chip mono klein" id="ki-status" title="Zustand der KI">…</span>
+      <button class="knopf knopf-still knopf-klein" id="thema" type="button" title="Hell / Dunkel">◐</button>
+    </div>
+  </div>
+</header>
+
+<main id="app">
+  <div class="arbeitet"><span class="laden"></span> Wird geladen …</div>
+</main>
+
+<div id="meldungen" role="status" aria-live="polite"></div>
+<div id="erklaer-blase" hidden>
+  <button class="knopf knopf-haupt knopf-klein" id="erklaer-knopf" type="button">Begriff erklären</button>
+</div>
+<div id="overlay" hidden><div class="overlay-karte" id="overlay-inhalt"></div></div>
+
+<script>
+  (function () {
+    'use strict';
+
+    /* ==================================================================
+       Teil 1 – Fachsprache-Engine und Fachdatenbank
+       (aus server/ai/ übernommen, siehe webapp/build.mjs)
+       ================================================================== */
+
+    /*__MOTOR__*/
+
+    /* ==================================================================
+       Teil 2 – Oberfläche
+       ================================================================== */
+
+    var $ = function (sel) { return document.querySelector(sel); };
+    var app = $('#app');
+
+    /* ---------------------------------------------------------- Elemente */
+    function el(beschreibung, attribute, kinder) {
+      var teile = String(beschreibung).split('.');
+      var knoten = document.createElement(teile.shift() || 'div');
+      if (teile.length) knoten.className = teile.join(' ');
+      attribute = attribute || {};
+      Object.keys(attribute).forEach(function (name) {
+        var wert = attribute[name];
+        if (wert === undefined || wert === null || wert === false) return;
+        if (name === 'text') knoten.textContent = String(wert);
+        else if (name === 'html') knoten.innerHTML = wert;
+        else if (name === 'wert') knoten.value = wert;
+        else if (name.indexOf('on') === 0 && typeof wert === 'function') knoten.addEventListener(name.slice(2), wert);
+        else knoten.setAttribute(name, wert === true ? '' : String(wert));
+      });
+      [].concat(kinder || []).forEach(function (kind) {
+        if (kind === null || kind === undefined || kind === false) return;
+        knoten.appendChild(kind instanceof Node ? kind : document.createTextNode(String(kind)));
+      });
+      return knoten;
+    }
+
+    function leere(knoten) {
+      while (knoten.firstChild) knoten.removeChild(knoten.firstChild);
+      return knoten;
+    }
+
+    function meldung(text, art, dauer) {
+      var behaelter = $('#meldungen');
+      var knoten = el('div.meldung.meldung-' + (art || 'info'), { text: text });
+      behaelter.appendChild(knoten);
+      setTimeout(function () {
+        knoten.style.transition = 'opacity .25s';
+        knoten.style.opacity = '0';
+        setTimeout(function () { knoten.remove(); }, 260);
+      }, dauer || 4200);
+    }
+
+    function hinweis(text, art) {
+      return el('div.hinweis.hinweis-' + (art || 'info'), {}, [
+        el('strong', { text: art === 'fehler' ? '×' : art === 'warnung' ? '!' : art === 'erfolg' ? '✓' : 'i', 'aria-hidden': 'true' }),
+        el('div', { text: text }),
+      ]);
+    }
+
+    function laden(text) {
+      return el('div.arbeitet', {}, [el('span.laden'), text || 'Die KI arbeitet …']);
+    }
+
+    function neueId() {
+      return 'p' + Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-3);
+    }
+
+    /* ---------------------------------------------------------- Overlay */
+    function overlay(kinder) {
+      var kasten = leere($('#overlay-inhalt'));
+      [].concat(kinder).forEach(function (k) { if (k) kasten.appendChild(k); });
+      $('#overlay').hidden = false;
+      return kasten;
+    }
+    function overlayZu() { $('#overlay').hidden = true; }
+    $('#overlay').addEventListener('click', function (e) { if (e.target.id === 'overlay') overlayZu(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') overlayZu(); });
+
+    function frageText(o) {
+      return new Promise(function (loesen) {
+        var eingabe = o.mehrzeilig
+          ? el('textarea', { wert: o.vorgabe || '', rows: 4 })
+          : el('input', { type: 'text', wert: o.vorgabe || '' });
+        var fertig = function (wert) { overlayZu(); loesen(wert); };
+        overlay([
+          el('h3', { text: o.titel }),
+          o.text ? el('p.klein.leise', { text: o.text }) : null,
+          eingabe,
+          el('div.knopf-reihe', { style: 'justify-content:flex-end;margin-top:14px' }, [
+            el('button.knopf', { type: 'button', text: 'Abbrechen', onclick: function () { fertig(null); } }),
+            el('button.knopf.knopf-haupt', { type: 'button', text: o.knopf || 'Übernehmen', onclick: function () { fertig(eingabe.value.trim()); } }),
+          ]),
+        ]);
+        setTimeout(function () { eingabe.focus(); }, 30);
+      });
+    }
+
+    function bestaetigen(o) {
+      return new Promise(function (loesen) {
+        var fertig = function (wert) { overlayZu(); loesen(wert); };
+        overlay([
+          el('h3', { text: o.titel }),
+          el('p.leise', { text: o.text || '' }),
+          el('div.knopf-reihe', { style: 'justify-content:flex-end;margin-top:14px' }, [
+            el('button.knopf', { type: 'button', text: 'Abbrechen', onclick: function () { fertig(false); } }),
+            el('button.knopf.knopf-gefahr', { type: 'button', text: o.knopf || 'Löschen', onclick: function () { fertig(true); } }),
+          ]),
+        ]);
+      });
+    }
+
+    function kopiere(text) {
+      if (!navigator.clipboard) { meldung('Kopieren geht in diesem Browser nicht.', 'warnung'); return; }
+      navigator.clipboard.writeText(text).then(
+        function () { meldung('In die Zwischenablage kopiert.', 'erfolg', 2200); },
+        function () { meldung('Kopieren hat nicht funktioniert.', 'warnung'); }
+      );
+    }
+
+    /* ---------------------------------------------------------- Plattform */
+    var Plattform = {
+      sample: null, db: null, user: null, uid: null, downloads: null, bereit: false,
+      init: function () {
+        var hole = function (name) {
+          try {
+            if (!window.claude || typeof window.claude.use !== 'function') return Promise.resolve(null);
+            return window.claude.use(name).catch(function () { return null; });
+          } catch (e) { return Promise.resolve(null); }
+        };
+        return Promise.all([hole('sample'), hole('db'), hole('user'), hole('downloads')]).then(function (r) {
+          Plattform.sample = r[0];
+          Plattform.db = r[1];
+          Plattform.user = r[2];
+          Plattform.downloads = r[3];
+          var id = Plattform.user && Plattform.user.id ? Plattform.user.id() : Promise.resolve(null);
+          return Promise.resolve(id).catch(function () { return null; });
+        }).then(function (uid) {
+          Plattform.uid = uid || null;
+          Plattform.bereit = true;
+          statusAnzeigen();
+        });
+      },
+    };
+
+    function statusAnzeigen() {
+      var chip = $('#ki-status');
+      if (Plattform.sample) {
+        chip.textContent = 'KI bereit';
+        chip.className = 'chip chip-patina mono klein';
+        chip.title = 'Texte werden von Claude erstellt – über dein Claude-Konto.';
+      } else {
+        chip.textContent = 'Fachmodus';
+        chip.className = 'chip chip-kupfer mono klein';
+        chip.title = 'Ohne KI: Die eingebaute Fachsprache-Engine und die Fachdatenbank arbeiten weiter.';
+      }
+    }
+
+    /* ---------------------------------------------------------- Speicher */
+    var LOKAL = 'shk-berichte-v1';
+
+    var Speicher = {
+      lokalLesen: function () {
+        try { return JSON.parse(localStorage.getItem(LOKAL) || '[]'); } catch (e) { return []; }
+      },
+      lokalSchreiben: function (liste) {
+        try { localStorage.setItem(LOKAL, JSON.stringify(liste)); } catch (e) { /* voll oder gesperrt */ }
+      },
+      nutztDb: function () { return Boolean(Plattform.db && Plattform.uid); },
+      sammlung: function () { return Plattform.db.collection('data/users/' + Plattform.uid); },
+
+      liste: function () {
+        if (!Speicher.nutztDb()) {
+          return Promise.resolve(Speicher.lokalLesen().map(kurzfassung).sort(nachDatum));
+        }
+        return Speicher.sammlung().get().then(function (schnappschuss) {
+          return schnappschuss.docs.map(function (d) {
+            var daten = d.data() || {};
+            return kurzfassung({ id: d.id, typ: daten.typ, titel: daten.titel, geaendert: daten.geaendert, erstellt: daten.erstellt });
+          }).sort(nachDatum);
+        });
+      },
+
+      lesen: function (id) {
+        if (!Speicher.nutztDb()) {
+          var treffer = Speicher.lokalLesen().filter(function (b) { return b.id === id; })[0];
+          return Promise.resolve(treffer || null);
+        }
+        return Speicher.sammlung().doc(id).get().then(function (d) {
+          if (!d.exists) return null;
+          var daten = d.data();
+          return { id: d.id, typ: daten.typ, titel: daten.titel, daten: daten.daten || {}, erstellt: daten.erstellt, geaendert: daten.geaendert };
+        });
+      },
+
+      speichern: function (bericht) {
+        var satz = {
+          typ: bericht.typ,
+          titel: bericht.titel || 'Ohne Titel',
+          daten: bericht.daten || {},
+          erstellt: bericht.erstellt || new Date().toISOString(),
+          geaendert: new Date().toISOString(),
+        };
+        var groesse = JSON.stringify(satz).length;
+        if (groesse > 200000) {
+          return Promise.reject(new Error('Der Bericht ist zu groß zum Speichern. Bitte eine Zeichnung entfernen oder aufteilen.'));
+        }
+        if (!Speicher.nutztDb()) {
+          var liste = Speicher.lokalLesen();
+          var id = bericht.id || neueId();
+          var index = -1;
+          liste.forEach(function (b, i) { if (b.id === id) index = i; });
+          var eintrag = Object.assign({ id: id }, satz);
+          if (index >= 0) liste[index] = eintrag; else liste.push(eintrag);
+          Speicher.lokalSchreiben(liste);
+          return Promise.resolve(id);
+        }
+        var ref = bericht.id ? Speicher.sammlung().doc(bericht.id) : Speicher.sammlung().doc();
+        return ref.set(satz).then(function () { return ref.id; });
+      },
+
+      loeschen: function (id) {
+        if (!Speicher.nutztDb()) {
+          Speicher.lokalSchreiben(Speicher.lokalLesen().filter(function (b) { return b.id !== id; }));
+          return Promise.resolve();
+        }
+        return Speicher.sammlung().doc(id).delete();
+      },
+    };
+
+    function kurzfassung(b) {
+      return { id: b.id, typ: b.typ, titel: b.titel, erstellt: b.erstellt, geaendert: b.geaendert };
+    }
+    function nachDatum(a, b) { return String(b.geaendert || '').localeCompare(String(a.geaendert || '')); }
+
+    function datumText(iso) {
+      if (!iso) return '';
+      var d = new Date(iso);
+      if (isNaN(d.getTime())) return '';
+      return d.toLocaleString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+
+    /* ---------------------------------------------------------- KI */
+    var REGELN = typeof FACHSPRACHE_REGELN === 'string' ? FACHSPRACHE_REGELN : '';
+
+    function bauePrompt(teile) {
+      return teile.filter(Boolean).join('\n').slice(0, 60000);
+    }
+
+    function kiFehlerText(code) {
+      switch (code) {
+        case 'not_granted': return 'Die KI wurde für diese Seite nicht freigegeben – es wurde der Fachmodus verwendet.';
+        case 'rate_limited': return 'Zu viele KI-Anfragen in kurzer Zeit. Bitte kurz warten – solange arbeitet der Fachmodus.';
+        case 'session_expired': return 'Bitte bei Claude neu anmelden. Solange arbeitet der Fachmodus.';
+        case 'invalid_json': return 'Die KI-Antwort war unvollständig. Bitte weniger auf einmal diktieren.';
+        case 'cancelled': return 'Abgebrochen.';
+        default: return 'Die KI war nicht erreichbar – es wurde der Fachmodus verwendet.';
+      }
+    }
+
+    var KI = {
+      da: function () { return Boolean(Plattform.sample); },
+
+      json: function (prompt, optionen) {
+        optionen = optionen || {};
+        return Plattform.sample.json(prompt, {
+          modelTier: optionen.tier || 'default',
+          cache: optionen.cache === undefined ? true : optionen.cache,
+          signal: optionen.signal,
+        });
+      },
+
+      berichtsheft: function (transkript) {
+        if (!KI.da()) return Promise.resolve(offlineErgebnis(offlineBerichtsheft(transkript)));
+        var prompt = bauePrompt([
+          REGELN,
+          '',
+          'Aufgabe: Wandle das folgende Diktat in Berichtshefteinträge für den Ausbildungsnachweis um.',
+          'Ordne die Tätigkeiten den genannten Wochentagen zu; ohne Wochentag nutze "Ohne Zuordnung".',
+          'Formuliere im Nominalstil, ergänze fachlich notwendige Zwischenschritte, erfinde keine Mengen oder Zeiten.',
+          '',
+          'Diktat:\n"""' + transkript + '"""',
+          promptHinweise(transkript),
+          faktenBlock(transkript, 2),
+          '',
+          'Antworte ausschließlich mit JSON in genau dieser Form:',
+          '{"tage":[{"tag":"Montag","eintraege":[{"titel":"Montage von …","punkte":["…","…"],"material":["…"],"werkzeug":["…"],"normen":["…"]}]}],"hinweise":["…"]}',
+        ]);
+        return KI.json(prompt, { cache: false })
+          .then(function (e) { e.quelle = 'ki'; return e; })
+          .catch(function (f) { return offlineErgebnis(offlineBerichtsheft(transkript), f); });
+      },
+
+      fachbericht: function (transkript) {
+        if (!KI.da()) return Promise.resolve(offlineErgebnis(offlineFachbericht(transkript)));
+        var prompt = bauePrompt([
+          REGELN,
+          '',
+          'Aufgabe: Erstelle aus der Arbeitsschilderung einen vollständigen Fachbericht.',
+          '- Arbeitsschritte in technisch richtiger Reihenfolge, jeder mit kurzer Begründung.',
+          '- Materialliste mit Werkstoff, Dimension (DN bzw. Außendurchmesser x Wandstärke) und Verbindungstechnik.',
+          '- Werkzeugliste mit Zweck.',
+          '- Arbeitssicherheit konkret zur Tätigkeit.',
+          '- 3 bis 6 Fachbegriffe lehrbuchartig erklären (Aufbau, Funktion, Zweck, Folgen bei Fehlern).',
+          '- Mengen nur, wenn sie genannt wurden.',
+          '',
+          'Schilderung:\n"""' + transkript + '"""',
+          promptHinweise(transkript),
+          faktenBlock(transkript, 4),
+          '',
+          'Antworte ausschließlich mit JSON in genau dieser Form:',
+          '{"titel":"…","einleitung":"…","anlage":"…","arbeitsschritte":[{"titel":"…","beschreibung":"…","hinweis":"…"}],' +
+            '"material":[{"bezeichnung":"…","dimension":"…","menge":"","hinweis":"…"}],"werkzeug":[{"bezeichnung":"…","zweck":"…"}],' +
+            '"arbeitssicherheit":["…"],"normen":[{"bezeichnung":"…","inhalt":"…"}],"erklaerungen":[{"begriff":"…","text":"…"}],"fazit":"…"}',
+        ]);
+        return KI.json(prompt, { cache: false })
+          .then(function (e) { e.quelle = 'ki'; return e; })
+          .catch(function (f) { return offlineErgebnis(offlineFachbericht(transkript), f); });
+      },
+
+      erklaerung: function (begriff, tiefe) {
+        tiefe = tiefe || 1;
+        if (!KI.da()) return Promise.resolve(offlineErgebnis(offlineErklaerung(begriff)));
+        var umfang = tiefe >= 3
+          ? 'Sehr ausführlich, auf Niveau der Gesellenprüfung Teil 2, mit Zahlenwerten, Berechnungsgrundlagen und Grenzwerten.'
+          : tiefe === 2
+            ? 'Ausführlich, mit typischen Einstellwerten und Fehlerbildern.'
+            : 'Klar und verständlich, aber vollständig: Aufbau, Funktionsprinzip, Zweck, Einsatzort.';
+        var prompt = bauePrompt([
+          REGELN,
+          '',
+          'Aufgabe: Erkläre für einen Auszubildenden Anlagenmechaniker SHK: "' + begriff + '"',
+          'Umfang: ' + umfang,
+          'Gliedere in Abschnitte wie Aufbau, Funktionsprinzip, Einsatz und Einbau, Kennwerte, typische Fehlerbilder.',
+          promptHinweise(begriff),
+          faktenBlock(begriff, 2),
+          '',
+          'Antworte ausschließlich mit JSON in genau dieser Form:',
+          '{"begriff":"…","kurz":"…","abschnitte":[{"titel":"…","text":"…","punkte":["…"]}],"normen":["…"],"stichworte":["…"]}',
+        ]);
+        return KI.json(prompt)
+          .then(function (e) { e.quelle = 'ki'; e.tiefe = tiefe; return e; })
+          .catch(function (f) { var r = offlineErgebnis(offlineErklaerung(begriff), f); r.tiefe = 1; return r; });
+      },
+
+      vertiefung: function (o) {
+        if (!KI.da()) return Promise.resolve(offlineErgebnis(offlineVertiefung(o.begriff, o.frage)));
+        var prompt = bauePrompt([
+          REGELN,
+          '',
+          o.frage
+            ? 'Aufgabe: Beantworte diese Rückfrage ausführlich und fachlich genau: "' + o.frage + '"'
+            : 'Aufgabe: Erläutere diesen Punkt deutlich ausführlicher: "' + o.begriff + '"',
+          o.begriff && o.frage ? 'Bezugspunkt: "' + o.begriff + '"' : '',
+          o.bisher ? 'Bisher wurde dazu gesagt:\n"""' + String(o.bisher).slice(0, 4000) + '"""' : '',
+          'Wiederhole das Bisherige nicht, sondern gehe tiefer: Ursachen, physikalische Zusammenhänge, Zahlenwerte, Folgen, Gegenmaßnahmen, Regelwerke.',
+          promptHinweise((o.begriff || '') + ' ' + (o.frage || '')),
+          faktenBlock((o.begriff || '') + ' ' + (o.frage || ''), 2),
+          '',
+          'Antworte ausschließlich mit JSON in genau dieser Form:',
+          '{"titel":"…","text":"…","punkte":["…"]}',
+        ]);
+        return KI.json(prompt, { cache: false })
+          .then(function (e) { e.quelle = 'ki'; return e; })
+          .catch(function (f) { return offlineErgebnis(offlineVertiefung(o.begriff, o.frage), f); });
+      },
+
+      zeichnung: function (beschreibung, titel) {
+        if (!KI.da()) return Promise.resolve(offlineErgebnis(zeichnungMitQuelle(schemaZeichnung(beschreibung, titel))));
+        var prompt = bauePrompt([
+          REGELN,
+          '',
+          'Aufgabe: Erstelle eine technische Prinzipskizze (Strang- bzw. Funktionsschema) als SVG zu: "' + beschreibung + '"',
+          'Vorgaben für das SVG:',
+          '- Wurzelelement <svg viewBox="0 0 900 460" xmlns="http://www.w3.org/2000/svg"> ohne width/height.',
+          '- Nur g, line, polyline, polygon, rect, circle, ellipse, path, text. Keine Skripte, kein style-Attribut, keine externen Verweise.',
+          '- Linien: stroke="currentColor" fill="none" stroke-width="2". Text: fill="currentColor" stroke="none" font-size="13".',
+          '- Fließrichtung mit kleinen Pfeil-Polygonen, jedes Bauteil beschriften, Aufbau von links nach rechts.',
+          '- Fachlich korrekte Einbaureihenfolge und Fließrichtung.',
+          promptHinweise(beschreibung),
+          faktenBlock(beschreibung, 2),
+          '',
+          'Antworte ausschließlich mit JSON in genau dieser Form:',
+          '{"titel":"…","beschreibung":"…","svg":"<svg …>…</svg>","legende":[{"zeichen":"…","bedeutung":"…"}]}',
+        ]);
+        return KI.json(prompt, { cache: false })
+          .then(function (e) {
+            var sauber = saeubereSvg(e.svg);
+            if (!sauber) {
+              var ersatz = zeichnungMitQuelle(schemaZeichnung(beschreibung, e.titel || titel));
+              ersatz.warnung = 'Die KI-Skizze war nicht verwertbar – es wurde eine Prinzipskizze aus der Bauteilerkennung erzeugt.';
+              return ersatz;
+            }
+            e.svg = sauber;
+            e.quelle = 'ki';
+            return e;
+          })
+          .catch(function (f) { return offlineErgebnis(zeichnungMitQuelle(schemaZeichnung(beschreibung, titel)), f); });
+      },
+    };
+
+    function zeichnungMitQuelle(z) { z.quelle = 'offline'; return z; }
+
+    function offlineErgebnis(ergebnis, fehler) {
+      ergebnis.quelle = 'offline';
+      if (fehler && fehler.code !== 'cancelled') ergebnis.warnung = kiFehlerText(fehler.code);
+      else if (!KI.da()) ergebnis.warnung = 'Fachmodus: Text aus der eingebauten Fachsprache-Engine und Fachdatenbank.';
+      return ergebnis;
+    }
+
+    /* ---------------------------------------------------------- Diktat */
+    var Erkenner = window.SpeechRecognition || window.webkitSpeechRecognition;
+    var spracheDa = Boolean(Erkenner);
+
+    function Diktat(o) {
+      this.beiSatz = o.beiSatz;
+      this.beiZwischen = o.beiZwischen || function () {};
+      this.beiStatus = o.beiStatus || function () {};
+      this.beiFehler = o.beiFehler || function () {};
+      this.sollLaufen = false;
+      this.erkenner = null;
+    }
+    Diktat.prototype.erzeuge = function () {
+      var selbst = this;
+      var r = new Erkenner();
+      r.lang = 'de-DE';
+      r.continuous = true;
+      r.interimResults = true;
+      r.onresult = function (ereignis) {
+        var zwischen = '';
+        for (var i = ereignis.resultIndex; i < ereignis.results.length; i += 1) {
+          var ergebnis = ereignis.results[i];
+          var text = (ergebnis[0] && ergebnis[0].transcript ? ergebnis[0].transcript : '').trim();
+          if (!text) continue;
+          if (ergebnis.isFinal) selbst.beiSatz(text);
+          else zwischen += text + ' ';
+        }
+        selbst.beiZwischen(zwischen.trim());
+      };
+      r.onerror = function (ereignis) {
+        var art = ereignis.error;
+        if (art === 'no-speech' || art === 'aborted') return;
+        selbst.sollLaufen = false;
+        selbst.beiStatus(false);
+        if (art === 'not-allowed' || art === 'service-not-allowed') {
+          selbst.beiFehler('Kein Zugriff auf das Mikrofon. In der eingebetteten Ansicht ist das oft gesperrt – der Text lässt sich genauso eintippen.');
+        } else if (art === 'network') {
+          selbst.beiFehler('Die Spracherkennung braucht eine Internetverbindung.');
+        } else {
+          selbst.beiFehler('Spracherkennung gestört (' + art + ').');
+        }
+      };
+      r.onend = function () {
+        if (selbst.sollLaufen) setTimeout(function () { if (selbst.sollLaufen) selbst.starteIntern(); }, 250);
+        else selbst.beiStatus(false);
+      };
+      r.onstart = function () { selbst.beiStatus(true); };
+      return r;
+    };
+    Diktat.prototype.starteIntern = function () {
+      try {
+        if (!this.erkenner) this.erkenner = this.erzeuge();
+        this.erkenner.start();
+      } catch (e) { /* bereits gestartet */ }
+    };
+    Diktat.prototype.start = function () {
+      if (!spracheDa) {
+        this.beiFehler('Dieser Browser kann noch nicht zuhören. In Chrome, Edge oder Safari klappt das Diktat – oder einfach tippen.');
+        return;
+      }
+      this.sollLaufen = true;
+      this.starteIntern();
+    };
+    Diktat.prototype.stopp = function () {
+      this.sollLaufen = false;
+      try { if (this.erkenner) this.erkenner.stop(); } catch (e) { /* egal */ }
+      this.beiStatus(false);
+    };
+    Diktat.prototype.umschalten = function () { if (this.sollLaufen) this.stopp(); else this.start(); };
+
+    function vorlesen(text) {
+      if (!('speechSynthesis' in window)) return false;
+      window.speechSynthesis.cancel();
+      var a = new SpeechSynthesisUtterance(String(text).slice(0, 6000));
+      a.lang = 'de-DE';
+      window.speechSynthesis.speak(a);
+      return true;
+    }
+    function vorlesenStopp() { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); }
+
+    var MIKRO_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">' +
+      '<rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor" stroke="none"/>' +
+      '<path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg>';
+    var STOPP_SVG = '<svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>';
+
+    /* ---------------------------------------------------------- Diktatfeld */
+    function diktatFeld(o) {
+      o = o || {};
+      var textfeld = el('textarea', {
+        rows: 3,
+        placeholder: o.platzhalter || 'Hier erscheint das Diktat – der Text lässt sich jederzeit ändern.',
+        'aria-label': 'Diktattext',
+      });
+      var zwischen = el('div.zwischen');
+      var status = el('div.klein.leise', {
+        text: spracheDa ? 'Mikrofon antippen und sprechen.' : 'Diktat in diesem Browser nicht möglich – bitte tippen.',
+      });
+
+      var steuerung = {
+        hole: function () { return textfeld.value.trim(); },
+        setze: function (t) { textfeld.value = t; },
+        anfuegen: function (t) {
+          var alt = textfeld.value.trim();
+          textfeld.value = alt ? alt + ' ' + t : t;
+          textfeld.scrollTop = textfeld.scrollHeight;
+        },
+        leeren: function () { textfeld.value = ''; },
+        stopp: function () { diktat.stopp(); },
+        textfeld: textfeld,
+      };
+
+      var mikro = el('button.mikro', {
+        type: 'button',
+        title: 'Diktat starten / beenden',
+        'aria-label': 'Diktat starten oder beenden',
+        'data-aktiv': 'false',
+        html: MIKRO_SVG,
+      });
+
+      var diktat = new Diktat({
+        beiSatz: function (satz) {
+          zwischen.textContent = '';
+          var befehl = o.beiBefehl ? erkenneBefehl(satz) : null;
+          if (befehl) {
+            Promise.resolve(o.beiBefehl(befehl, steuerung)).then(function (erledigt) {
+              if (erledigt === false) steuerung.anfuegen(satz);
+              else status.textContent = 'Befehl ausgeführt: ' + befehlName(befehl.aktion);
+            });
+            return;
+          }
+          steuerung.anfuegen(satz);
+        },
+        beiZwischen: function (text) { zwischen.textContent = text ? '… ' + text : ''; },
+        beiStatus: function (aktiv) {
+          mikro.setAttribute('data-aktiv', String(aktiv));
+          mikro.innerHTML = aktiv ? STOPP_SVG : MIKRO_SVG;
+          status.textContent = aktiv
+            ? 'Ich höre zu … einfach frei erzählen.'
+            : spracheDa ? 'Mikrofon antippen und sprechen.' : 'Diktat in diesem Browser nicht möglich – bitte tippen.';
+        },
+        beiFehler: function (text) { meldung(text, 'warnung', 7000); },
+      });
+
+      mikro.addEventListener('click', function () { diktat.umschalten(); });
+
+      var knoepfe = el('div.knopf-reihe', { style: 'margin-top:11px' }, (o.aktionen || []).map(function (a) {
+        return el('button.knopf.' + (a.klasse || 'knopf-haupt'), {
+          type: 'button',
+          text: a.text,
+          onclick: function (ereignis) {
+            var knopf = ereignis.currentTarget;
+            var alt = knopf.textContent;
+            knopf.disabled = true;
+            knopf.textContent = 'Bitte warten …';
+            Promise.resolve()
+              .then(function () { return a.aufruf(steuerung.hole(), steuerung); })
+              .catch(function (f) { meldung(f && f.message ? f.message : 'Das hat nicht funktioniert.', 'fehler', 6000); })
+              .then(function () { knopf.disabled = false; knopf.textContent = alt; });
+          },
+        });
+      }));
+
+      steuerung.element = el('section.diktat', {}, [
+        el('div.diktat-kopf', {}, [
+          mikro,
+          el('div.diktat-text', {}, [
+            el('h3', { text: o.titel, style: 'margin-bottom:2px' }),
+            o.hilfe ? el('div.klein.leise', { text: o.hilfe }) : null,
+            status,
+          ]),
+        ]),
+        el('div', { style: 'margin-top:11px' }, [textfeld]),
+        zwischen,
+        knoepfe,
+      ]);
+      return steuerung;
+    }
+
+    function befehlName(aktion) {
+      return ({
+        loeschen: 'Punkt löschen',
+        erklaeren: 'Begriff erklären',
+        vertiefen: 'Ausführlicher',
+        zeichnung: 'Zeichnung',
+        titel: 'Titel gesetzt',
+        speichern: 'Gespeichert',
+      })[aktion] || aktion;
+    }
+
+    /* ---------------------------------------------------------- Punktliste */
+    function punktListe(o) {
+      var punkte = o.punkte;
+      var gewaehlt = {};
+      var liste = el('ul.punkte');
+      var leiste = el('div.auswahl-leiste', { hidden: true });
+
+      function zeichne() {
+        leere(liste);
+        if (!punkte.length) liste.appendChild(el('li.klein.leise', { text: o.leerText || 'Noch keine Einträge.' }));
+        punkte.forEach(function (punkt, index) {
+          var zeile;
+          var kasten = el('input', {
+            type: 'checkbox',
+            'aria-label': 'Punkt ' + (index + 1) + ' auswählen',
+            onchange: function (e) {
+              if (e.currentTarget.checked) gewaehlt[punkt.id] = true; else delete gewaehlt[punkt.id];
+              zeile.setAttribute('data-gewaehlt', String(Boolean(gewaehlt[punkt.id])));
+              zeichneLeiste();
+            },
+          });
+          if (gewaehlt[punkt.id]) kasten.checked = true;
+
+          var titelKnoten = punkt.titel !== undefined && punkt.titel !== null
+            ? el('div.punkt-text', {
+                contenteditable: 'true', 'data-erklaerbar': '1', style: 'font-weight:600',
+                text: punkt.titel,
+                onblur: function (e) {
+                  var neu = e.currentTarget.textContent.trim();
+                  if (neu !== punkt.titel) { punkt.titel = neu; o.beiAenderung(); }
+                },
+              })
+            : null;
+
+          var textKnoten = el('div.punkt-text', {
+            contenteditable: 'true', 'data-erklaerbar': '1', text: punkt.text,
+            onblur: function (e) {
+              var neu = e.currentTarget.textContent.trim();
+              if (neu !== punkt.text) { punkt.text = neu; o.beiAenderung(); }
+            },
+            onkeydown: function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); e.currentTarget.blur(); } },
+          });
+
+          var werkzeuge = el('div.punkt-werkzeuge', {}, [
+            o.beiVertiefen ? el('button.knopf.knopf-klein.knopf-still', {
+              type: 'button', text: 'Genauer', title: 'Diesen Punkt ausführlicher machen',
+              onclick: function () { o.beiVertiefen(punkt); },
+            }) : null,
+            o.beiErklaeren ? el('button.knopf.knopf-klein.knopf-still', {
+              type: 'button', text: 'Erklären', title: 'Fachbegriffe erklären lassen',
+              onclick: function () { o.beiErklaeren(punkt.text); },
+            }) : null,
+            el('button.knopf.knopf-klein.knopf-still', {
+              type: 'button', text: '🗑', title: 'Punkt löschen',
+              onclick: function () {
+                var i = punkte.indexOf(punkt);
+                if (i >= 0) punkte.splice(i, 1);
+                delete gewaehlt[punkt.id];
+                o.beiAenderung();
+                zeichne(); zeichneLeiste();
+              },
+            }),
+          ]);
+
+          zeile = el('li.punkt', { 'data-gewaehlt': String(Boolean(gewaehlt[punkt.id])) }, [
+            kasten,
+            el('div.punkt-inhalt', {}, [
+              titelKnoten,
+              textKnoten,
+              punkt.zusatz ? el('div.punkt-zusatz', {}, [
+                el('strong.klein', { text: punkt.zusatzTitel || 'Vertiefung' }),
+                el('div', { text: punkt.zusatz, 'data-erklaerbar': '1' }),
+                el('div.knopf-reihe', { style: 'margin-top:7px' }, [
+                  el('button.knopf.knopf-klein.knopf-still', {
+                    type: 'button', text: 'Vertiefung entfernen',
+                    onclick: function () { delete punkt.zusatz; delete punkt.zusatzTitel; o.beiAenderung(); zeichne(); },
+                  }),
+                ]),
+              ]) : null,
+            ]),
+            werkzeuge,
+          ]);
+          liste.appendChild(zeile);
+        });
+      }
+
+      function gewaehlteIds() { return Object.keys(gewaehlt); }
+
+      function zeichneLeiste() {
+        leere(leiste);
+        var ids = gewaehlteIds();
+        leiste.hidden = ids.length === 0;
+        if (!ids.length) return;
+        leiste.appendChild(el('strong.klein', { text: ids.length + ' ausgewählt' }));
+        leiste.appendChild(el('button.knopf.knopf-klein.knopf-gefahr', {
+          type: 'button', text: 'Löschen',
+          onclick: function () {
+            for (var i = punkte.length - 1; i >= 0; i -= 1) if (gewaehlt[punkte[i].id]) punkte.splice(i, 1);
+            gewaehlt = {};
+            o.beiAenderung(); zeichne(); zeichneLeiste();
+          },
+        }));
+        if (o.beiVertiefen) {
+          leiste.appendChild(el('button.knopf.knopf-klein', {
+            type: 'button', text: 'Genauer machen',
+            onclick: function () {
+              punkte.filter(function (p) { return gewaehlt[p.id]; }).forEach(function (p) { o.beiVertiefen(p); });
+            },
+          }));
+        }
+        if (o.beiErklaeren) {
+          leiste.appendChild(el('button.knopf.knopf-klein', {
+            type: 'button', text: 'Begriffe erklären',
+            onclick: function () {
+              o.beiErklaeren(punkte.filter(function (p) { return gewaehlt[p.id]; }).map(function (p) { return p.text; }).join(' '));
+            },
+          }));
+        }
+        leiste.appendChild(el('button.knopf.knopf-klein.knopf-still', {
+          type: 'button', text: 'Auswahl aufheben',
+          onclick: function () { gewaehlt = {}; zeichne(); zeichneLeiste(); },
+        }));
+      }
+
+      zeichne();
+      return {
+        element: el('div', {}, [liste, leiste]),
+        punkteRoh: punkte,
+        neuZeichnen: function () { zeichne(); zeichneLeiste(); },
+        loescheNummer: function (nummer) {
+          var i = Number(nummer) - 1;
+          if (i >= 0 && i < punkte.length) {
+            var weg = punkte.splice(i, 1)[0];
+            delete gewaehlt[weg.id];
+            o.beiAenderung(); zeichne(); zeichneLeiste();
+            return weg;
+          }
+          return null;
+        },
+        loescheText: function (suchtext) {
+          var s = String(suchtext || '').toLowerCase().trim();
+          if (!s) return null;
+          for (var i = 0; i < punkte.length; i += 1) {
+            if (punkte[i].text.toLowerCase().indexOf(s) >= 0) {
+              var weg = punkte.splice(i, 1)[0];
+              delete gewaehlt[weg.id];
+              o.beiAenderung(); zeichne(); zeichneLeiste();
+              return weg;
+            }
+          }
+          return null;
+        },
+      };
+    }
+
+    function zuPunkten(liste) {
+      return (liste || []).map(function (eintrag) {
+        if (typeof eintrag === 'string') return { id: neueId(), text: eintrag };
+        return Object.assign({ id: eintrag.id || neueId() }, eintrag);
+      }).filter(function (p) { return String(p.text || '').trim().length > 0; });
+    }
+
+    function chipListe(o) {
+      var behaelter = el('div.chip-liste');
+      function zeichne() {
+        leere(behaelter);
+        if (!o.werte.length) behaelter.appendChild(el('span.klein.leise', { text: 'Noch nichts erfasst.' }));
+        o.werte.forEach(function (wert, index) {
+          behaelter.appendChild(el('span.chip.' + (o.klasse || ''), {}, [
+            el('span', { text: wert }),
+            el('button', {
+              type: 'button', text: '×', 'aria-label': wert + ' entfernen',
+              onclick: function () { o.werte.splice(index, 1); o.beiAenderung(); zeichne(); },
+            }),
+          ]));
+        });
+        behaelter.appendChild(el('button.knopf.knopf-klein.knopf-still', {
+          type: 'button', text: '+ ' + (o.hinzu || 'Hinzufügen'),
+          onclick: function () {
+            frageText({ titel: o.hinzu || 'Hinzufügen', knopf: 'Hinzufügen' }).then(function (neu) {
+              if (!neu) return;
+              o.werte.push(neu); o.beiAenderung(); zeichne();
+            });
+          },
+        }));
+      }
+      zeichne();
+      return { element: behaelter, neuZeichnen: zeichne };
+    }
+
+    /* ---------------------------------------------------------- Begriffsauswahl */
+    var erklaerFunktion = null;
+    function setzeErklaerHandler(fn) { erklaerFunktion = fn; }
+
+    (function auswahlErkennung() {
+      var blase = $('#erklaer-blase');
+      var knopf = $('#erklaer-knopf');
+      var gemerkt = '';
+      knopf.addEventListener('pointerdown', function () {
+        gemerkt = String(window.getSelection ? window.getSelection().toString() : '').trim();
+      });
+      knopf.addEventListener('click', function () {
+        var text = gemerkt || String(window.getSelection ? window.getSelection().toString() : '').trim();
+        blase.hidden = true;
+        gemerkt = '';
+        if (text && erklaerFunktion) erklaerFunktion(text);
+      });
+      function pruefe() {
+        var auswahl = window.getSelection ? window.getSelection() : null;
+        var text = auswahl ? String(auswahl.toString()).trim() : '';
+        if (!erklaerFunktion || !text || text.length < 3 || text.length > 400 || !auswahl.rangeCount) { blase.hidden = true; return; }
+        var bereich = auswahl.getRangeAt(0);
+        var knoten = bereich.commonAncestorContainer;
+        var element = knoten.nodeType === 1 ? knoten : knoten.parentElement;
+        if (!element || !element.closest('[data-erklaerbar]')) { blase.hidden = true; return; }
+        var kasten = bereich.getBoundingClientRect();
+        blase.hidden = false;
+        blase.style.top = window.scrollY + kasten.top - 42 + 'px';
+        blase.style.left = Math.max(12, window.scrollX + kasten.left) + 'px';
+      }
+      document.addEventListener('mouseup', function () { setTimeout(pruefe, 10); });
+      document.addEventListener('touchend', function () { setTimeout(pruefe, 140); });
+      var wartet = false;
+      document.addEventListener('scroll', function () {
+        if (wartet) return;
+        wartet = true;
+        requestAnimationFrame(function () { wartet = false; pruefe(); });
+      }, { passive: true });
+    })();
+
+    /* ---------------------------------------------------------- Erklärdialog */
+    function erklaerDialog(begriff, o) {
+      o = o || {};
+      var tiefe = 1;
+      var erklaerung = null;
+      var verlauf = [];
+      var inhalt = overlay([laden('„' + begriff + '“ wird erklärt …')]);
+
+      function textVon(mitTitel) {
+        if (!erklaerung) return '';
+        var teile = [];
+        if (mitTitel !== false) teile.push(erklaerung.begriff);
+        teile.push(erklaerung.kurz);
+        (erklaerung.abschnitte || []).forEach(function (a) {
+          teile.push((a.titel + ': ' + (a.text || '')).trim());
+          (a.punkte || []).forEach(function (p) { teile.push('– ' + p); });
+        });
+        if ((erklaerung.normen || []).length) teile.push('Regelwerke: ' + erklaerung.normen.join(', '));
+        verlauf.forEach(function (v) {
+          teile.push('Rückfrage: ' + v.frage);
+          teile.push((v.titel || 'Vertiefung') + ': ' + v.text);
+          (v.punkte || []).forEach(function (p) { teile.push('– ' + p); });
+        });
+        return teile.filter(Boolean).join('\n\n');
+      }
+
+      function hole(neueTiefe) {
+        tiefe = neueTiefe;
+        leere(inhalt).appendChild(laden(tiefe > 1 ? 'Ausführlichere Erklärung …' : '„' + begriff + '“ wird erklärt …'));
+        return KI.erklaerung(begriff, tiefe).then(function (e) { erklaerung = e; zeichne(); });
+      }
+
+      function nachfrage(frage) {
+        var kasten = el('div', {}, [laden('Rückfrage wird beantwortet …')]);
+        inhalt.appendChild(kasten);
+        return KI.vertiefung({ begriff: (erklaerung && erklaerung.begriff) || begriff, frage: frage, bisher: textVon() })
+          .then(function (antwort) {
+            antwort.frage = frage;
+            verlauf.push(antwort);
+            zeichne();
+          })
+          .catch(function () { kasten.remove(); });
+      }
+
+      function zeichne() {
+        leere(inhalt);
+        if (!erklaerung) return;
+        inhalt.appendChild(el('div.karte-kopf', {}, [
+          el('h2', { text: erklaerung.begriff }),
+          el('div.rechts', {}, [
+            el('span.chip.mono.klein.' + (erklaerung.quelle === 'ki' ? 'chip-patina' : 'chip-kupfer'), {
+              text: erklaerung.quelle === 'ki' ? 'KI · Stufe ' + tiefe : 'Fachdatenbank',
+            }),
+          ]),
+        ]));
+        if (erklaerung.warnung) inhalt.appendChild(hinweis(erklaerung.warnung, 'warnung'));
+        inhalt.appendChild(el('p', { text: erklaerung.kurz, 'data-erklaerbar': '1', style: 'font-size:1.03rem' }));
+
+        (erklaerung.abschnitte || []).forEach(function (abschnitt) {
+          inhalt.appendChild(el('div', { style: 'margin-top:13px' }, [
+            el('h3.label', { text: abschnitt.titel }),
+            abschnitt.text ? el('p', { text: abschnitt.text, 'data-erklaerbar': '1' }) : null,
+            (abschnitt.punkte || []).length
+              ? el('ul', { 'data-erklaerbar': '1', style: 'margin:0;padding-left:19px' },
+                  abschnitt.punkte.map(function (p) { return el('li', { text: p, style: 'margin-bottom:3px' }); }))
+              : null,
+            el('div.knopf-reihe', { style: 'margin-top:6px' }, [
+              el('button.knopf.knopf-klein.knopf-still', {
+                type: 'button', text: 'Diesen Punkt erläutern',
+                onclick: function () {
+                  nachfrage('Erläutere genauer: ' + abschnitt.titel + ' – ' + (abschnitt.text || (abschnitt.punkte || []).join('; ')));
+                },
+              }),
+            ]),
+          ]));
+        });
+
+        if ((erklaerung.normen || []).length) {
+          inhalt.appendChild(el('div', { style: 'margin-top:13px' }, [
+            el('h3.label', { text: 'Regelwerke' }),
+            el('div.chip-liste', {}, erklaerung.normen.map(function (n) { return el('span.chip.chip-patina', { text: n }); })),
+          ]));
+        }
+
+        verlauf.forEach(function (eintrag) {
+          inhalt.appendChild(el('div.punkt-zusatz', { style: 'margin-top:13px' }, [
+            el('div.klein.leise', { text: 'Rückfrage: ' + eintrag.frage }),
+            el('strong', { text: eintrag.titel || 'Vertiefung' }),
+            el('p', { text: eintrag.text, 'data-erklaerbar': '1', style: 'margin:5px 0 0' }),
+            (eintrag.punkte || []).length
+              ? el('ul', { style: 'margin:5px 0 0;padding-left:19px' }, eintrag.punkte.map(function (p) { return el('li', { text: p }); }))
+              : null,
+          ]));
+        });
+
+        if ((erklaerung.stichworte || []).length) {
+          inhalt.appendChild(el('div', { style: 'margin-top:13px' }, [
+            el('h3.label', { text: 'Passt dazu' }),
+            el('div.chip-liste', {}, erklaerung.stichworte.map(function (s) {
+              return el('button.chip.chip-blau', {
+                type: 'button', text: s,
+                onclick: function () { overlayZu(); erklaerDialog(s, o); },
+              });
+            })),
+          ]));
+        }
+
+        var frageFeld = diktatFeld({
+          titel: 'Nachfragen',
+          hilfe: 'Zum Beispiel: „Erläutere, was genau passiert, wenn zu viel Druck kommt.“',
+          platzhalter: 'Rückfrage eingeben oder einsprechen …',
+          aktionen: [{
+            text: 'Rückfrage stellen',
+            klasse: 'knopf-haupt',
+            aufruf: function (text, steuerung) {
+              if (!text) { meldung('Bitte zuerst eine Rückfrage eingeben.', 'warnung'); return; }
+              steuerung.stopp(); steuerung.leeren();
+              return nachfrage(text);
+            },
+          }],
+        });
+
+        inhalt.appendChild(el('div.knopf-reihe', { style: 'margin-top:16px' }, [
+          tiefe < 3 && KI.da() ? el('button.knopf.knopf-kupfer', {
+            type: 'button', text: tiefe === 1 ? 'Ausführlicher' : 'Noch ausführlicher',
+            onclick: function () { hole(tiefe + 1); },
+          }) : null,
+          el('button.knopf', { type: 'button', text: '🔊 Vorlesen', onclick: function () {
+            if (!vorlesen(textVon())) meldung('Vorlesen geht in diesem Browser nicht.', 'warnung');
+          } }),
+          el('button.knopf.knopf-still', { type: 'button', text: 'Stopp', onclick: vorlesenStopp }),
+          el('button.knopf.knopf-still', { type: 'button', text: 'Text kopieren', onclick: function () { kopiere(textVon()); } }),
+          o.einfuegen ? el('button.knopf.knopf-haupt', {
+            type: 'button', text: 'In Bericht übernehmen',
+            onclick: function () {
+              o.einfuegen({ begriff: erklaerung.begriff, text: textVon(false) });
+              overlayZu();
+              meldung('Erklärung übernommen.', 'erfolg');
+            },
+          }) : null,
+          el('button.knopf.knopf-still', { type: 'button', text: 'Schließen', onclick: overlayZu }),
+        ]));
+        inhalt.appendChild(el('div', { style: 'margin-top:13px' }, [frageFeld.element]));
+      }
+
+      hole(1);
+    }
+
+    /* ---------------------------------------------------------- Berichtskopf */
+    function berichtKopf(o) {
+      var titelFeld = el('input', {
+        type: 'text', wert: o.titel || '', placeholder: 'Titel des Berichts',
+        'aria-label': 'Titel des Berichts', style: 'font-size:1.1rem;font-weight:600',
+        oninput: function (e) { o.beiTitel(e.currentTarget.value); },
+      });
+      var status = el('span.klein.leise.mono', { text: o.gespeichert ? 'gespeichert' : 'noch nicht gespeichert' });
+      var element = el('section.karte', {}, [
+        titelFeld,
+        el('div.karte-kopf', { style: 'margin:11px 0 0' }, [
+          status,
+          el('div.rechts', {}, (o.aktionen || []).map(function (a) {
+            return el('button.knopf.knopf-klein.' + (a.klasse || 'knopf-still'), { type: 'button', text: a.text, onclick: a.aufruf });
+          }).concat([
+            el('button.knopf.knopf-klein.knopf-still', { type: 'button', text: 'Drucken / PDF', onclick: function () { window.print(); } }),
+            el('button.knopf.knopf-klein.knopf-haupt', { type: 'button', text: 'Speichern', onclick: function () { o.beiSpeichern(); } }),
+          ])),
+        ]),
+      ]);
+      return { element: element, titelFeld: titelFeld, status: status };
+    }
+
+    /* ---------------------------------------------------------- Zeichnung */
+    function zeichnungsBereich(o) {
+      var bereich = el('section.karte');
+      function zeichne() {
+        leere(bereich);
+        bereich.appendChild(el('div.karte-kopf', {}, [
+          el('h2', { text: 'Zeichnung / Schema' }),
+          el('div.rechts', {}, [
+            o.daten.zeichnung ? el('button.knopf.knopf-klein.knopf-gefahr', {
+              type: 'button', text: 'Zeichnung löschen',
+              onclick: function () { delete o.daten.zeichnung; o.beiAenderung(); zeichne(); },
+            }) : null,
+          ]),
+        ]));
+        if (o.daten.zeichnung && o.daten.zeichnung.svg) {
+          bereich.appendChild(el('div.zeichnung', { html: o.daten.zeichnung.svg }));
+          if (o.daten.zeichnung.beschreibung) {
+            bereich.appendChild(el('p.klein.leise', { text: o.daten.zeichnung.beschreibung, style: 'margin-top:9px' }));
+          }
+          if ((o.daten.zeichnung.legende || []).length) {
+            bereich.appendChild(el('div', { style: 'margin-top:7px' }, [
+              el('h3.label', { text: 'Legende' }),
+              el('div.chip-liste', {}, o.daten.zeichnung.legende.map(function (l) {
+                return el('span.chip', { text: l.zeichen + ' – ' + l.bedeutung });
+              })),
+            ]));
+          }
+        } else {
+          bereich.appendChild(el('p.klein.leise', {
+            text: 'Noch keine Zeichnung. Beschreiben, was gezeichnet werden soll – zum Beispiel „Hauswasserstation mit Filter, Wasserzähler und Druckminderer“.',
+          }));
+        }
+        var feld = diktatFeld({
+          titel: 'Zeichnung erstellen',
+          hilfe: 'Anlagenteil beschreiben – die Skizze entsteht passend zum Bericht.',
+          platzhalter: 'z. B. Strangschema der Trinkwasserinstallation …',
+          aktionen: [{
+            text: o.daten.zeichnung ? 'Neu zeichnen' : 'Zeichnen lassen',
+            klasse: 'knopf-haupt',
+            aufruf: function (text, steuerung) {
+              var beschreibung = text || o.titel();
+              if (!beschreibung) { meldung('Bitte kurz beschreiben, was gezeichnet werden soll.', 'warnung'); return; }
+              steuerung.stopp();
+              return KI.zeichnung(beschreibung, o.titel()).then(function (ergebnis) {
+                o.daten.zeichnung = ergebnis;
+                o.beiAenderung();
+                zeichne();
+                if (ergebnis.warnung) meldung(ergebnis.warnung, 'warnung', 6000);
+                else meldung('Zeichnung erstellt.', 'erfolg');
+              });
+            },
+          }],
+        });
+        bereich.appendChild(el('div', { style: 'margin-top:13px' }, [feld.element]));
+      }
+      zeichne();
+      return { element: bereich, neuZeichnen: zeichne };
+    }
+
+    /* ==================================================================
+       Ansichten
+       ================================================================== */
+
+    var TYP_NAME = { berichtsheft: 'Berichtsheft', fachbericht: 'Fachbericht', erklaerung: 'Erklärung' };
+    var TYP_PFAD = { berichtsheft: '#/berichtsheft/', fachbericht: '#/fachbericht/', erklaerung: '#/erklaeren/' };
+    var WOCHENTAGE_UI = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
+
+    /* ------------------------------------------------------------ Start */
+    function ansichtStart() {
+      leere(app);
+      var stat = statistik();
+
+      app.appendChild(el('div', { style: 'margin-bottom:16px' }, [
+        el('h1', { text: 'Moin!' }),
+        el('p.leise', {
+          text: KI.da()
+            ? 'Sprich, wie du auf der Baustelle sprichst – daraus wird ein Fachtext mit Nennweiten, Werkzeug und Regelwerken.'
+            : 'Fachmodus: Die eingebaute Fachsprache-Engine und die Fachdatenbank arbeiten auch ohne KI.',
+        }),
+      ]));
+
+      app.appendChild(el('div.raster.raster-3', {}, [
+        kachel('#/berichtsheft/neu', 'berichtsheft', 'Berichtsheft', 'Ganze Woche einsprechen – die Tage werden erkannt und fachlich formuliert.', ''),
+        kachel('#/fachbericht/neu', 'fachbericht', 'Fachbericht', 'Arbeitsschritte, Materialliste, Werkzeugliste, Erklärungen und Zeichnung.', 'kachel-kupfer'),
+        kachel('#/erklaeren/neu', 'erklaeren', 'Erklären lassen', '„Erkläre einen Druckminderer“ – mit Rückfragen so tief, wie du willst.', 'kachel-patina'),
+      ]));
+
+      app.appendChild(el('a.kachel', { href: '#/nachschlagen', style: 'margin-top:14px;display:block' }, [
+        el('div.karte-kopf', {}, [
+          el('h3', { text: 'Nachschlagen in der Fachdatenbank', style: 'margin:0' }),
+          el('div.rechts', {}, [el('span.chip.chip-blau.mono.klein', { text: stat.gesamt + ' Einträge' })]),
+        ]),
+        el('p.klein.leise', { style: 'margin:0 0 9px' }, [
+          'Sanitär, Heizung, Gas, Lüftung, Klima und Versorgungstechnik: Funktionsprinzipien, Kennwerte, Formeln, Regelwerke und Fehlerbilder.',
+        ]),
+        el('div.chip-liste', {}, Object.keys(BEREICHE).map(function (b) {
+          return el('span.chip.mono.klein', { text: BEREICHE[b] + ' · ' + (stat.nachBereich[b] || 0) });
+        })),
+      ]));
+
+      var listenKarte = el('section.karte', { style: 'margin-top:18px' }, [
+        el('div.karte-kopf', {}, [el('h2', { text: 'Meine Berichte' })]),
+        laden('Berichte werden geladen …'),
+      ]);
+      app.appendChild(listenKarte);
+
+      Speicher.liste().then(function (berichte) {
+        leere(listenKarte);
+        listenKarte.appendChild(el('div.karte-kopf', {}, [
+          el('h2', { text: 'Meine Berichte' }),
+          el('div.rechts', {}, [
+            el('span.klein.leise.mono', { text: berichte.length + ' gespeichert' }),
+          ]),
+        ]));
+        if (!Speicher.nutztDb()) {
+          listenKarte.appendChild(hinweis(
+            'Die Berichte liegen nur in diesem Browser. Für die Sicherung über Geräte hinweg die Seite in Claude geöffnet lassen bzw. angemeldet aufrufen.',
+            'warnung'
+          ));
+        }
+        if (!berichte.length) {
+          listenKarte.appendChild(el('div.leer', {}, [
+            el('p', { text: 'Noch keine Berichte. Oben einen Bereich wählen und losreden.' }),
+          ]));
+          return;
+        }
+        var liste = el('div');
+        berichte.forEach(function (bericht) {
+          var zeile = el('div.zeile', {}, [
+            el('span.chip.mono.klein', { text: TYP_NAME[bericht.typ] || bericht.typ }),
+            el('div', { style: 'flex:1;min-width:0' }, [
+              el('a.titel', { href: (TYP_PFAD[bericht.typ] || '#/') + bericht.id, text: bericht.titel || 'Ohne Titel' }),
+              el('div.klein.leise.mono', { text: datumText(bericht.geaendert) }),
+            ]),
+            el('button.knopf.knopf-klein.knopf-still', {
+              type: 'button', text: '🗑', title: 'Bericht löschen',
+              onclick: function () {
+                bestaetigen({ titel: 'Bericht löschen?', text: '„' + (bericht.titel || 'Ohne Titel') + '“ wird endgültig gelöscht.' })
+                  .then(function (ja) {
+                    if (!ja) return;
+                    Speicher.loeschen(bericht.id).then(function () {
+                      zeile.remove();
+                      meldung('Bericht gelöscht.', 'erfolg');
+                    });
+                  });
+              },
+            }),
+          ]);
+          liste.appendChild(zeile);
+        });
+        listenKarte.appendChild(liste);
+      }).catch(function (f) {
+        leere(listenKarte).appendChild(hinweis(f.message || 'Berichte konnten nicht geladen werden.', 'fehler'));
+      });
+    }
+
+    function kachel(pfad, art, titel, text, klasse) {
+      var zeichen = {
+        berichtsheft: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>',
+        fachbericht: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h11a4 4 0 0 1 0 8H7"/><circle cx="19" cy="17" r="2.5"/><path d="M3 17h6"/></svg>',
+        erklaeren: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3a6 6 0 0 0-3 11v3h6v-3a6 6 0 0 0-3-11Z"/><path d="M10 21h4"/></svg>',
+      }[art];
+      return el('a.kachel.' + (klasse || ''), { href: pfad }, [
+        el('div.kachel-zeichen', { html: zeichen }),
+        el('h3', { text: titel }),
+        el('p.klein.leise', { text: text, style: 'margin:0' }),
+      ]);
+    }
+
+    /* ------------------------------------------------------------ Berichtsheft */
+    function ansichtBerichtsheft(id) {
+      leere(app);
+      var zustand = {
+        id: id && id !== 'neu' ? id : null,
+        titel: 'Berichtsheft KW ' + wochenNummer(new Date()) + ' / ' + new Date().getFullYear(),
+        daten: { tage: [], hinweise: [], rohtext: '' },
+      };
+      var listen = [];
+      var fokus = null;
+
+      if (zustand.id) {
+        app.appendChild(laden('Bericht wird geladen …'));
+        Speicher.lesen(zustand.id).then(function (bericht) {
+          if (!bericht) { leere(app).appendChild(hinweis('Bericht nicht gefunden.', 'fehler')); return; }
+          zustand.titel = bericht.titel;
+          zustand.daten = Object.assign({ tage: [], hinweise: [], rohtext: '' }, bericht.daten);
+          zustand.erstellt = bericht.erstellt;
+          aufbauen();
+        });
+      } else {
+        aufbauen();
+      }
+
+      function alsText() {
+        var z = [zustand.titel, ''];
+        (zustand.daten.tage || []).forEach(function (tag) {
+          z.push(tag.tag);
+          (tag.eintraege || []).forEach(function (eintrag) {
+            z.push('  ' + eintrag.titel);
+            (eintrag.punkte || []).forEach(function (p) {
+              z.push('   - ' + p.text);
+              if (p.zusatz) z.push('     ' + p.zusatz.replace(/\n/g, '\n     '));
+            });
+            if ((eintrag.material || []).length) z.push('   Material: ' + eintrag.material.join(', '));
+            if ((eintrag.werkzeug || []).length) z.push('   Werkzeug: ' + eintrag.werkzeug.join(', '));
+            if ((eintrag.normen || []).length) z.push('   Regelwerke: ' + eintrag.normen.join(', '));
+          });
+          z.push('');
+        });
+        return z.join('\n');
+      }
+
+      function speichern() {
+        return Speicher.speichern({ id: zustand.id, typ: 'berichtsheft', titel: zustand.titel, daten: zustand.daten, erstellt: zustand.erstellt })
+          .then(function (neueIdWert) {
+            zustand.id = neueIdWert;
+            kopf.status.textContent = 'gespeichert · ' + new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+            meldung('Gespeichert.', 'erfolg', 2200);
+          })
+          .catch(function (f) { meldung(f.message || 'Speichern fehlgeschlagen.', 'fehler', 6000); });
+      }
+
+      var merkTimer = null;
+      function merken() {
+        kopf.status.textContent = 'ungespeicherte Änderungen';
+        clearTimeout(merkTimer);
+        merkTimer = setTimeout(function () {
+          Speicher.speichern({ id: zustand.id, typ: 'berichtsheft', titel: zustand.titel, daten: zustand.daten, erstellt: zustand.erstellt })
+            .then(function (neueIdWert) {
+              zustand.id = neueIdWert;
+              kopf.status.textContent = 'gespeichert · ' + new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+            })
+            .catch(function () { kopf.status.textContent = 'Speichern fehlgeschlagen'; });
+        }, 2500);
+      }
+
+      var kopf, inhaltsBereich, hinweisBereich;
+
+      function aufbauen() {
+        leere(app);
+        kopf = berichtKopf({
+          titel: zustand.titel,
+          gespeichert: Boolean(zustand.id),
+          beiTitel: function (wert) { zustand.titel = wert; merken(); },
+          beiSpeichern: speichern,
+          aktionen: [{ text: 'Text kopieren', aufruf: function () { kopiere(alsText()); } }],
+        });
+
+        var diktat = diktatFeld({
+          titel: 'Woche einsprechen',
+          hilfe: 'Zum Beispiel: „Montag hab ich 100er SML Rohr mit der Flex geschnitten und anmontiert, Dienstag 22er Kupfer verpresst.“',
+          platzhalter: 'Diktat der Woche …',
+          beiBefehl: befehlAusfuehren,
+          aktionen: [
+            {
+              text: KI.da() ? 'In Fachsprache umwandeln' : 'Fachsprache erzeugen',
+              klasse: 'knopf-haupt',
+              aufruf: function (text, steuerung) {
+                if (!text) { meldung('Bitte zuerst etwas sprechen oder eintippen.', 'warnung'); return; }
+                steuerung.stopp();
+                return KI.berichtsheft(text).then(function (ergebnis) {
+                  uebernehmen(ergebnis);
+                  zustand.daten.rohtext = (zustand.daten.rohtext ? zustand.daten.rohtext + '\n' : '') + text;
+                  steuerung.leeren();
+                  merken();
+                  meldung(ergebnis.quelle === 'ki' ? 'Eintrag in Fachsprache erstellt.' : 'Eintrag im Fachmodus erstellt.', 'erfolg');
+                });
+              },
+            },
+            {
+              text: 'Vorschau Fachbegriffe',
+              klasse: 'knopf-still',
+              aufruf: function (text) {
+                if (!text) return;
+                var vorschau = normalisiere(text);
+                overlay([
+                  el('h3', { text: 'So schreibt die Fachsprache-Engine' }),
+                  el('p', { text: vorschau.text, 'data-erklaerbar': '1' }),
+                  vorschau.treffer.length ? el('div', {}, [
+                    el('h3.label', { text: 'Erkannte Begriffe' }),
+                    el('div.chip-liste', {}, vorschau.treffer.map(function (t) {
+                      return el('span.chip.chip-blau', { text: t.roh + ' → ' + t.fach });
+                    })),
+                  ]) : null,
+                  el('div.knopf-reihe', { style: 'margin-top:14px;justify-content:flex-end' }, [
+                    el('button.knopf.knopf-haupt', { type: 'button', text: 'Alles klar', onclick: overlayZu }),
+                  ]),
+                ]);
+              },
+            },
+          ],
+        });
+
+        inhaltsBereich = el('div');
+        hinweisBereich = el('div');
+
+        app.appendChild(kopf.element);
+        app.appendChild(el('div', { style: 'margin-top:14px' }, [diktat.element]));
+        app.appendChild(el('div', { style: 'margin-top:14px' }, [hinweisBereich]));
+        app.appendChild(el('div', { style: 'margin-top:14px' }, [inhaltsBereich]));
+
+        var zeichnung = zeichnungsBereich({
+          daten: zustand.daten,
+          beiAenderung: merken,
+          titel: function () { return zustand.titel; },
+        });
+        var klapp = el('details.karte', { style: 'margin-top:14px' }, [
+          el('summary', { text: 'Zeichnung zum Berichtsheft (optional)', style: 'cursor:pointer;font-weight:600' }),
+          el('div', { style: 'margin-top:11px' }, [zeichnung.element]),
+        ]);
+        app.appendChild(klapp);
+
+        setzeErklaerHandler(function (text) { erklaerDialog(text, {}); });
+        zeichneAlles();
+      }
+
+      function uebernehmen(ergebnis) {
+        (ergebnis.tage || []).forEach(function (tag) {
+          var name = normTag(tag.tag);
+          var vorhanden = null;
+          zustand.daten.tage.forEach(function (t) { if (t.tag === name) vorhanden = t; });
+          if (!vorhanden) { vorhanden = { id: neueId(), tag: name, eintraege: [] }; zustand.daten.tage.push(vorhanden); }
+          (tag.eintraege || []).forEach(function (eintrag) {
+            vorhanden.eintraege.push({
+              id: neueId(),
+              titel: eintrag.titel || 'Tätigkeit',
+              punkte: zuPunkten(eintrag.punkte),
+              material: eintrag.material || [],
+              werkzeug: eintrag.werkzeug || [],
+              normen: eintrag.normen || [],
+            });
+          });
+        });
+        zustand.daten.tage.sort(function (a, b) { return tagIndex(a.tag) - tagIndex(b.tag); });
+        if ((ergebnis.hinweise || []).length) {
+          var alle = (zustand.daten.hinweise || []).concat(ergebnis.hinweise);
+          zustand.daten.hinweise = alle.filter(function (h, i) { return alle.indexOf(h) === i; });
+        }
+        zustand.daten.warnung = ergebnis.warnung || '';
+        zeichneAlles();
+      }
+
+      function vertiefePunkt(punkt, liste) {
+        meldung('Punkt wird ausführlicher erklärt …', 'info', 2000);
+        return KI.vertiefung({ begriff: punkt.text, bisher: punkt.zusatz || '' }).then(function (antwort) {
+          punkt.zusatz = [antwort.text].concat((antwort.punkte || []).map(function (p) { return '• ' + p; })).filter(Boolean).join('\n');
+          punkt.zusatzTitel = antwort.titel || 'Vertiefung';
+          merken();
+          liste.neuZeichnen();
+        });
+      }
+
+      function befehlAusfuehren(befehl) {
+        switch (befehl.aktion) {
+          case 'loeschen': {
+            var liste = fokus || listen[listen.length - 1];
+            if (!liste) { meldung('Es gibt noch keine Punkte zum Löschen.', 'warnung'); return true; }
+            var weg = befehl.nummer ? liste.loescheNummer(befehl.nummer) : liste.loescheText(befehl.suchtext || befehl.text || '');
+            meldung(weg ? 'Gelöscht: „' + weg.text.slice(0, 60) + '“' : 'Kein passender Punkt gefunden.', weg ? 'erfolg' : 'warnung');
+            return true;
+          }
+          case 'erklaeren':
+            erklaerDialog(befehl.begriff || befehl.text || '', {});
+            return true;
+          case 'vertiefen': {
+            var l = fokus || listen[listen.length - 1];
+            var p = l && l.punkteRoh[l.punkteRoh.length - 1];
+            if (p) vertiefePunkt(p, l); else meldung('Bitte zuerst einen Punkt anlegen.', 'warnung');
+            return true;
+          }
+          case 'zeichnung':
+            return KI.zeichnung(befehl.begriff || befehl.text || zustand.titel, zustand.titel).then(function (ergebnis) {
+              zustand.daten.zeichnung = ergebnis;
+              merken();
+              aufbauen();
+              meldung('Zeichnung erstellt.', 'erfolg');
+              return true;
+            });
+          case 'titel':
+            if (befehl.text) { zustand.titel = befehl.text; kopf.titelFeld.value = befehl.text; merken(); }
+            return true;
+          case 'speichern':
+            speichern();
+            return true;
+          default:
+            return false;
+        }
+      }
+
+      function zeichneAlles() {
+        leere(inhaltsBereich);
+        leere(hinweisBereich);
+        listen.length = 0;
+
+        if (zustand.daten.warnung) hinweisBereich.appendChild(hinweis(zustand.daten.warnung, 'warnung'));
+        if ((zustand.daten.hinweise || []).length) {
+          hinweisBereich.appendChild(el('section.karte', {}, [
+            el('div.karte-kopf', {}, [
+              el('h3', { text: 'Fachliche Hinweise' }),
+              el('div.rechts', {}, [
+                el('button.knopf.knopf-klein.knopf-still', {
+                  type: 'button', text: 'Ausblenden',
+                  onclick: function () { zustand.daten.hinweise = []; merken(); zeichneAlles(); },
+                }),
+              ]),
+            ]),
+            el('ul', { style: 'margin:0;padding-left:19px' }, zustand.daten.hinweise.map(function (h) {
+              return el('li.klein', { text: h });
+            })),
+          ]));
+        }
+
+        if (!zustand.daten.tage.length) {
+          inhaltsBereich.appendChild(el('div.karte.leer', {}, [
+            el('p', { text: 'Noch keine Einträge. Oben aufs Mikrofon tippen und die Woche erzählen.' }),
+            el('div.knopf-reihe', { style: 'justify-content:center' }, [
+              el('button.knopf.knopf-still', { type: 'button', text: '+ Tag von Hand anlegen', onclick: tagAnlegen }),
+            ]),
+          ]));
+          return;
+        }
+
+        zustand.daten.tage.forEach(function (tag) { inhaltsBereich.appendChild(tagKarte(tag)); });
+        inhaltsBereich.appendChild(el('div.knopf-reihe', { style: 'margin-top:13px' }, [
+          el('button.knopf.knopf-still', { type: 'button', text: '+ Tag hinzufügen', onclick: tagAnlegen }),
+        ]));
+      }
+
+      function tagAnlegen() {
+        var frei = WOCHENTAGE_UI.filter(function (t) {
+          return !zustand.daten.tage.some(function (x) { return x.tag === t; });
+        })[0] || '';
+        frageText({ titel: 'Welcher Tag?', text: 'Zum Beispiel Montag oder ein eigener Text.', vorgabe: frei, knopf: 'Tag anlegen' })
+          .then(function (name) {
+            if (!name) return;
+            zustand.daten.tage.push({ id: neueId(), tag: normTag(name), eintraege: [] });
+            zustand.daten.tage.sort(function (a, b) { return tagIndex(a.tag) - tagIndex(b.tag); });
+            merken();
+            zeichneAlles();
+          });
+      }
+
+      function tagKarte(tag) {
+        var karte = el('section.karte');
+        karte.appendChild(el('div.karte-kopf', {}, [
+          el('h2', { text: tag.tag }),
+          el('div.rechts', {}, [
+            el('button.knopf.knopf-klein.knopf-still', {
+              type: 'button', text: '+ Tätigkeit',
+              onclick: function () {
+                tag.eintraege.push({ id: neueId(), titel: 'Neue Tätigkeit', punkte: [], material: [], werkzeug: [], normen: [] });
+                merken(); zeichneAlles();
+              },
+            }),
+            el('button.knopf.knopf-klein.knopf-gefahr', {
+              type: 'button', text: 'Tag löschen',
+              onclick: function () {
+                bestaetigen({ titel: tag.tag + ' löschen?', text: 'Alle Tätigkeiten dieses Tages werden entfernt.' }).then(function (ja) {
+                  if (!ja) return;
+                  zustand.daten.tage = zustand.daten.tage.filter(function (t) { return t !== tag; });
+                  merken(); zeichneAlles();
+                });
+              },
+            }),
+          ]),
+        ]));
+        if (!tag.eintraege.length) karte.appendChild(el('p.klein.leise', { text: 'Keine Tätigkeit erfasst.' }));
+        tag.eintraege.forEach(function (eintrag) { karte.appendChild(eintragBlock(tag, eintrag)); });
+        return karte;
+      }
+
+      function eintragBlock(tag, eintrag) {
+        var liste = punktListe({
+          punkte: eintrag.punkte,
+          beiAenderung: merken,
+          beiVertiefen: function (punkt) { return vertiefePunkt(punkt, liste); },
+          beiErklaeren: function (text) { erklaerDialog(text, {}); },
+          leerText: 'Noch keine Tätigkeitspunkte.',
+        });
+        listen.push(liste);
+
+        var block = el('div', { style: 'margin-top:13px' }, [
+          el('div.karte-kopf', { style: 'margin-bottom:7px' }, [
+            el('input', {
+              type: 'text', wert: eintrag.titel, 'aria-label': 'Überschrift der Tätigkeit',
+              style: 'font-weight:600;max-width:420px',
+              oninput: function (e) { eintrag.titel = e.currentTarget.value; merken(); },
+            }),
+            el('div.rechts', {}, [
+              el('button.knopf.knopf-klein.knopf-still', {
+                type: 'button', text: '+ Punkt',
+                onclick: function () {
+                  eintrag.punkte.push({ id: neueId(), text: 'Neuer Punkt' });
+                  merken(); liste.neuZeichnen();
+                },
+              }),
+              el('button.knopf.knopf-klein.knopf-gefahr', {
+                type: 'button', text: 'Tätigkeit löschen',
+                onclick: function () {
+                  tag.eintraege = tag.eintraege.filter(function (x) { return x !== eintrag; });
+                  merken(); zeichneAlles();
+                },
+              }),
+            ]),
+          ]),
+          liste.element,
+        ]);
+        block.addEventListener('focusin', function () { fokus = liste; });
+        block.addEventListener('click', function () { fokus = liste; });
+
+        var zusatz = el('div.raster.raster-3', { style: 'margin-top:11px' });
+        [['material', 'Material', 'chip-kupfer'], ['werkzeug', 'Werkzeug', 'chip-blau'], ['normen', 'Regelwerke', 'chip-patina']]
+          .forEach(function (feld) {
+            eintrag[feld[0]] = eintrag[feld[0]] || [];
+            var chips = chipListe({ werte: eintrag[feld[0]], klasse: feld[2], beiAenderung: merken, hinzu: feld[1] });
+            zusatz.appendChild(el('div', {}, [el('h3.label', { text: feld[1] }), chips.element]));
+          });
+        block.appendChild(zusatz);
+        return block;
+      }
+    }
+
+    function normTag(name) {
+      var t = String(name || '').trim();
+      var treffer = WOCHENTAGE_UI.filter(function (w) { return w.toLowerCase() === t.toLowerCase(); })[0];
+      return treffer || t || 'Ohne Zuordnung';
+    }
+    function tagIndex(name) {
+      var i = WOCHENTAGE_UI.indexOf(name);
+      return i < 0 ? 99 : i;
+    }
+    function wochenNummer(datum) {
+      var d = new Date(Date.UTC(datum.getFullYear(), datum.getMonth(), datum.getDate()));
+      var tag = d.getUTCDay() || 7;
+      d.setUTCDate(d.getUTCDate() + 4 - tag);
+      var start = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+      return Math.ceil(((d - start) / 86400000 + 1) / 7);
+    }
+
+    /* ------------------------------------------------------------ Fachbericht */
+    function ansichtFachbericht(id) {
+      leere(app);
+      var zustand = {
+        id: id && id !== 'neu' ? id : null,
+        titel: 'Neuer Fachbericht',
+        daten: {
+          einleitung: '', anlage: '', arbeitsschritte: [], material: [], werkzeug: [],
+          arbeitssicherheit: [], normen: [], erklaerungen: [], fazit: '', rohtext: '',
+        },
+      };
+      var listen = [];
+      var fokus = null;
+      var kopf, inhaltsBereich;
+
+      if (zustand.id) {
+        app.appendChild(laden('Bericht wird geladen …'));
+        Speicher.lesen(zustand.id).then(function (bericht) {
+          if (!bericht) { leere(app).appendChild(hinweis('Bericht nicht gefunden.', 'fehler')); return; }
+          zustand.titel = bericht.titel;
+          zustand.daten = Object.assign(zustand.daten, bericht.daten);
+          zustand.erstellt = bericht.erstellt;
+          aufbauen();
+        });
+      } else {
+        aufbauen();
+      }
+
+      function alsText() {
+        var z = [zustand.titel, ''];
+        function abschnitt(name, inhalt) { if (inhalt) { z.push(name.toUpperCase(), inhalt, ''); } }
+        abschnitt('Einleitung', zustand.daten.einleitung);
+        abschnitt('Objekt und Anlage', zustand.daten.anlage);
+        if (zustand.daten.arbeitsschritte.length) {
+          z.push('ARBEITSSCHRITTE');
+          zustand.daten.arbeitsschritte.forEach(function (s, i) {
+            z.push(i + 1 + '. ' + [s.titel, s.text].filter(Boolean).join(' – '));
+            if (s.zusatz) z.push('   ' + s.zusatz.replace(/\n/g, '\n   '));
+          });
+          z.push('');
+        }
+        if (zustand.daten.material.length) {
+          z.push('MATERIALLISTE');
+          zustand.daten.material.forEach(function (m) {
+            z.push('- ' + [m.bezeichnung, m.dimension, m.menge, m.hinweis].filter(Boolean).join(' | '));
+          });
+          z.push('');
+        }
+        if (zustand.daten.werkzeug.length) {
+          z.push('WERKZEUGLISTE');
+          zustand.daten.werkzeug.forEach(function (w) { z.push('- ' + [w.bezeichnung, w.zweck].filter(Boolean).join(' – ')); });
+          z.push('');
+        }
+        if (zustand.daten.arbeitssicherheit.length) {
+          z.push('ARBEITSSICHERHEIT');
+          zustand.daten.arbeitssicherheit.forEach(function (s) { z.push('- ' + s.text); });
+          z.push('');
+        }
+        if (zustand.daten.normen.length) {
+          z.push('REGELWERKE');
+          zustand.daten.normen.forEach(function (n) { z.push('- ' + [n.titel, n.text].filter(Boolean).join(': ')); });
+          z.push('');
+        }
+        if (zustand.daten.erklaerungen.length) {
+          z.push('ERKLÄRUNGEN');
+          zustand.daten.erklaerungen.forEach(function (e) {
+            z.push(e.titel); z.push(e.text); if (e.zusatz) z.push(e.zusatz); z.push('');
+          });
+        }
+        abschnitt('Fazit', zustand.daten.fazit);
+        return z.join('\n');
+      }
+
+      function speichern() {
+        return Speicher.speichern({ id: zustand.id, typ: 'fachbericht', titel: zustand.titel, daten: zustand.daten, erstellt: zustand.erstellt })
+          .then(function (neu) {
+            zustand.id = neu;
+            kopf.status.textContent = 'gespeichert · ' + new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+            meldung('Gespeichert.', 'erfolg', 2200);
+          })
+          .catch(function (f) { meldung(f.message || 'Speichern fehlgeschlagen.', 'fehler', 6000); });
+      }
+
+      var merkTimer = null;
+      function merken() {
+        kopf.status.textContent = 'ungespeicherte Änderungen';
+        clearTimeout(merkTimer);
+        merkTimer = setTimeout(function () {
+          Speicher.speichern({ id: zustand.id, typ: 'fachbericht', titel: zustand.titel, daten: zustand.daten, erstellt: zustand.erstellt })
+            .then(function (neu) {
+              zustand.id = neu;
+              kopf.status.textContent = 'gespeichert · ' + new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+            })
+            .catch(function () { kopf.status.textContent = 'Speichern fehlgeschlagen'; });
+        }, 2500);
+      }
+
+      function aufbauen() {
+        leere(app);
+        kopf = berichtKopf({
+          titel: zustand.titel,
+          gespeichert: Boolean(zustand.id),
+          beiTitel: function (wert) { zustand.titel = wert; merken(); },
+          beiSpeichern: speichern,
+          aktionen: [{ text: 'Text kopieren', aufruf: function () { kopiere(alsText()); } }],
+        });
+
+        var diktat = diktatFeld({
+          titel: 'Fachbericht einsprechen',
+          hilfe: 'Zum Beispiel: „Montage einer Hauswasserstation im Keller, Absperrung, Filter, Druckminderer und Wasserzähler in 1 Zoll, Anschluss mit 28er Kupfer.“',
+          platzhalter: 'Arbeit beschreiben …',
+          beiBefehl: befehlAusfuehren,
+          aktionen: [
+            {
+              text: KI.da() ? 'Fachbericht erstellen' : 'Fachbericht erzeugen',
+              klasse: 'knopf-haupt',
+              aufruf: function (text, steuerung) {
+                if (!text) { meldung('Bitte zuerst die Arbeit beschreiben.', 'warnung'); return; }
+                steuerung.stopp();
+                return KI.fachbericht(text).then(function (ergebnis) {
+                  uebernehmen(ergebnis);
+                  zustand.daten.rohtext = (zustand.daten.rohtext ? zustand.daten.rohtext + '\n' : '') + text;
+                  steuerung.leeren();
+                  merken();
+                  meldung(ergebnis.quelle === 'ki' ? 'Fachbericht erstellt.' : 'Fachbericht im Fachmodus erstellt.', 'erfolg');
+                });
+              },
+            },
+            {
+              text: 'Ergänzen',
+              klasse: 'knopf-still',
+              aufruf: function (text, steuerung) {
+                if (!text) return;
+                steuerung.stopp();
+                return KI.fachbericht('Ergänzung zum bestehenden Bericht: ' + text).then(function (ergebnis) {
+                  uebernehmen(ergebnis, true);
+                  steuerung.leeren();
+                  merken();
+                  meldung('Ergänzung übernommen.', 'erfolg');
+                });
+              },
+            },
+          ],
+        });
+
+        inhaltsBereich = el('div');
+        app.appendChild(kopf.element);
+        app.appendChild(el('div', { style: 'margin-top:14px' }, [diktat.element]));
+        app.appendChild(el('div', { style: 'margin-top:14px' }, [inhaltsBereich]));
+
+        setzeErklaerHandler(function (text) {
+          erklaerDialog(text, {
+            einfuegen: function (e) {
+              zustand.daten.erklaerungen.push({ id: neueId(), titel: e.begriff, text: e.text });
+              merken(); zeichneAlles();
+            },
+          });
+        });
+        zeichneAlles();
+      }
+
+      function uebernehmen(ergebnis, ergaenzen) {
+        if (!ergaenzen) {
+          if (ergebnis.titel && (zustand.titel === 'Neuer Fachbericht' || !zustand.titel)) {
+            zustand.titel = ergebnis.titel;
+            kopf.titelFeld.value = zustand.titel;
+          }
+          zustand.daten.einleitung = ergebnis.einleitung || zustand.daten.einleitung;
+          zustand.daten.anlage = ergebnis.anlage || zustand.daten.anlage;
+          zustand.daten.fazit = ergebnis.fazit || zustand.daten.fazit;
+        }
+        (ergebnis.arbeitsschritte || []).forEach(function (s) {
+          zustand.daten.arbeitsschritte.push({
+            id: neueId(),
+            titel: s.titel || '',
+            text: [s.beschreibung, s.hinweis ? 'Hinweis: ' + s.hinweis : ''].filter(Boolean).join(' '),
+          });
+        });
+        (ergebnis.material || []).forEach(function (m) {
+          zustand.daten.material.push({
+            id: neueId(), bezeichnung: m.bezeichnung || '', dimension: m.dimension || '', menge: m.menge || '', hinweis: m.hinweis || '',
+          });
+        });
+        (ergebnis.werkzeug || []).forEach(function (w) {
+          zustand.daten.werkzeug.push({ id: neueId(), bezeichnung: w.bezeichnung || '', zweck: w.zweck || '' });
+        });
+        zustand.daten.arbeitssicherheit = zustand.daten.arbeitssicherheit.concat(zuPunkten(ergebnis.arbeitssicherheit || []));
+        (ergebnis.normen || []).forEach(function (n) {
+          zustand.daten.normen.push({ id: neueId(), titel: n.bezeichnung || '', text: n.inhalt || '' });
+        });
+        (ergebnis.erklaerungen || []).forEach(function (e) {
+          zustand.daten.erklaerungen.push({ id: neueId(), titel: e.begriff || '', text: e.text || '' });
+        });
+        zustand.daten.warnung = ergebnis.warnung || '';
+        entdoppeln();
+        zeichneAlles();
+      }
+
+      function entdoppeln() {
+        function einmalig(liste, schluesselFn) {
+          var gesehen = {};
+          return liste.filter(function (eintrag) {
+            var k = String(schluesselFn(eintrag) || '').toLowerCase().trim();
+            if (!k || gesehen[k]) return false;
+            gesehen[k] = true;
+            return true;
+          });
+        }
+        zustand.daten.material = einmalig(zustand.daten.material, function (m) { return m.bezeichnung + '|' + m.dimension; });
+        zustand.daten.werkzeug = einmalig(zustand.daten.werkzeug, function (w) { return w.bezeichnung; });
+        zustand.daten.normen = einmalig(zustand.daten.normen, function (n) { return n.titel; });
+        zustand.daten.erklaerungen = einmalig(zustand.daten.erklaerungen, function (e) { return e.titel; });
+        zustand.daten.arbeitssicherheit = einmalig(zustand.daten.arbeitssicherheit, function (s) { return s.text; });
+      }
+
+      function vertiefePunkt(punkt, liste) {
+        meldung('Wird ausführlicher erklärt …', 'info', 2000);
+        return KI.vertiefung({ begriff: [punkt.titel, punkt.text].filter(Boolean).join(': '), bisher: punkt.zusatz || '' })
+          .then(function (antwort) {
+            punkt.zusatz = [antwort.text].concat((antwort.punkte || []).map(function (p) { return '• ' + p; })).filter(Boolean).join('\n');
+            punkt.zusatzTitel = antwort.titel || 'Vertiefung';
+            merken(); liste.neuZeichnen();
+          });
+      }
+
+      function befehlAusfuehren(befehl) {
+        switch (befehl.aktion) {
+          case 'loeschen': {
+            var liste = fokus || listen[0];
+            if (!liste) { meldung('Es gibt noch keine Punkte zum Löschen.', 'warnung'); return true; }
+            var weg = befehl.nummer ? liste.loescheNummer(befehl.nummer) : liste.loescheText(befehl.suchtext || befehl.text || '');
+            meldung(weg ? 'Gelöscht.' : 'Kein passender Punkt gefunden.', weg ? 'erfolg' : 'warnung');
+            return true;
+          }
+          case 'erklaeren':
+            erklaerDialog(befehl.begriff || befehl.text || '', {
+              einfuegen: function (e) {
+                zustand.daten.erklaerungen.push({ id: neueId(), titel: e.begriff, text: e.text });
+                merken(); zeichneAlles();
+              },
+            });
+            return true;
+          case 'zeichnung':
+            return KI.zeichnung(befehl.begriff || befehl.text || zustand.titel, zustand.titel).then(function (ergebnis) {
+              zustand.daten.zeichnung = ergebnis;
+              merken(); zeichneAlles();
+              meldung('Zeichnung erstellt.', 'erfolg');
+              return true;
+            });
+          case 'titel':
+            if (befehl.text) { zustand.titel = befehl.text; kopf.titelFeld.value = befehl.text; merken(); }
+            return true;
+          case 'speichern':
+            speichern();
+            return true;
+          default:
+            return false;
+        }
+      }
+
+      function textAbschnitt(beschriftung, feld, platzhalter) {
+        return el('section.karte', {}, [
+          el('div.karte-kopf', {}, [el('h2', { text: beschriftung })]),
+          el('textarea', {
+            rows: 4, placeholder: platzhalter, wert: zustand.daten[feld] || '', 'data-erklaerbar': '1',
+            oninput: function (e) { zustand.daten[feld] = e.currentTarget.value; merken(); },
+          }),
+          el('div.knopf-reihe', { style: 'margin-top:9px' }, [
+            el('button.knopf.knopf-klein.knopf-still', {
+              type: 'button', text: 'Ausführlicher formulieren',
+              onclick: function (ereignis) {
+                var knopf = ereignis.currentTarget;
+                var feldKnoten = knopf.closest('section').querySelector('textarea');
+                if (!feldKnoten.value.trim()) { meldung('Bitte zuerst etwas eintragen.', 'warnung'); return; }
+                knopf.disabled = true;
+                KI.vertiefung({
+                  begriff: beschriftung + ' des Fachberichts',
+                  frage: 'Formuliere ausführlicher und fachlich genauer: ' + feldKnoten.value,
+                  bisher: feldKnoten.value,
+                }).then(function (antwort) {
+                  feldKnoten.value = antwort.text;
+                  zustand.daten[feld] = antwort.text;
+                  merken();
+                }).catch(function (f) { meldung(f.message || 'Hat nicht geklappt.', 'fehler'); })
+                  .then(function () { knopf.disabled = false; });
+              },
+            }),
+          ]),
+        ]);
+      }
+
+      function tabellenBereich(o) {
+        var bereich = el('section.karte');
+        function zeichne() {
+          leere(bereich);
+          bereich.appendChild(el('div.karte-kopf', {}, [
+            el('h2', { text: o.beschriftung }),
+            el('div.rechts', {}, [
+              el('button.knopf.knopf-klein.knopf-still', {
+                type: 'button', text: '+ Zeile',
+                onclick: function () { o.liste.push(Object.assign({ id: neueId() }, o.leerzeile)); merken(); zeichne(); },
+              }),
+            ]),
+          ]));
+          if (!o.liste.length) { bereich.appendChild(el('p.klein.leise', { text: 'Noch nichts erfasst.' })); return; }
+          var kopfzeile = el('tr', {}, o.spalten.map(function (s) { return el('th', { text: s.titel }); })
+            .concat([el('th', { 'aria-label': 'Aktion' })]));
+          var zeilen = o.liste.map(function (eintrag) {
+            return el('tr', {}, o.spalten.map(function (s) {
+              return el('td', {
+                contenteditable: 'true', 'data-erklaerbar': '1', text: eintrag[s.feld] || '',
+                onblur: function (e) {
+                  var neu = e.currentTarget.textContent.trim();
+                  if (neu !== eintrag[s.feld]) { eintrag[s.feld] = neu; merken(); }
+                },
+              });
+            }).concat([
+              el('td', { style: 'white-space:nowrap' }, [
+                el('button.knopf.knopf-klein.knopf-still', {
+                  type: 'button', text: 'Erklären',
+                  onclick: function () { erklaerDialog(eintrag[o.spalten[0].feld], {}); },
+                }),
+                el('button.knopf.knopf-klein.knopf-still', {
+                  type: 'button', text: '🗑',
+                  onclick: function () {
+                    var i = o.liste.indexOf(eintrag);
+                    if (i >= 0) o.liste.splice(i, 1);
+                    merken(); zeichne();
+                  },
+                }),
+              ]),
+            ]));
+          });
+          bereich.appendChild(el('div.tabelle-rahmen', {}, [
+            el('table.tabelle', {}, [el('thead', {}, [kopfzeile]), el('tbody', {}, zeilen)]),
+          ]));
+        }
+        zeichne();
+        return bereich;
+      }
+
+      function punktBereich(o) {
+        var bereich = el('section.karte');
+        zustand.daten[o.feld] = zustand.daten[o.feld] || [];
+        var liste = punktListe({
+          punkte: zustand.daten[o.feld],
+          beiAenderung: merken,
+          beiVertiefen: o.mitVertiefung === false ? null : function (punkt) { return vertiefePunkt(punkt, liste); },
+          beiErklaeren: function (text) { erklaerDialog(text, {}); },
+          leerText: o.leerText,
+        });
+        listen.push(liste);
+        bereich.appendChild(el('div.karte-kopf', {}, [
+          el('h2', { text: o.beschriftung }),
+          el('div.rechts', {}, [
+            el('button.knopf.knopf-klein.knopf-still', {
+              type: 'button', text: '+ Punkt',
+              onclick: function () {
+                frageText({ titel: o.beschriftung + ': neuer Punkt', knopf: 'Hinzufügen', mehrzeilig: true }).then(function (text) {
+                  if (!text) return;
+                  zustand.daten[o.feld].push({ id: neueId(), text: text });
+                  merken(); liste.neuZeichnen();
+                });
+              },
+            }),
+          ]),
+        ]));
+        bereich.appendChild(liste.element);
+        bereich.addEventListener('focusin', function () { fokus = liste; });
+        bereich.addEventListener('click', function () { fokus = liste; });
+        return bereich;
+      }
+
+      function erklaerungsBereich() {
+        var bereich = el('section.karte');
+        zustand.daten.erklaerungen = zustand.daten.erklaerungen || [];
+        var liste = punktListe({
+          punkte: zustand.daten.erklaerungen,
+          beiAenderung: merken,
+          beiVertiefen: function (punkt) { return vertiefePunkt(punkt, liste); },
+          beiErklaeren: function (text) { erklaerDialog(text, {}); },
+          leerText: 'Noch keine Erklärungen. Begriff einsprechen: „Erkläre einen Druckminderer“.',
+        });
+        listen.push(liste);
+        var feld = diktatFeld({
+          titel: 'Begriff erklären lassen',
+          hilfe: 'Die Erklärung lässt sich direkt in den Fachbericht übernehmen.',
+          platzhalter: 'z. B. Druckminderer, Systemtrenner, hydraulischer Abgleich …',
+          aktionen: [{
+            text: 'Erklären',
+            klasse: 'knopf-haupt',
+            aufruf: function (text, steuerung) {
+              if (!text) { meldung('Bitte einen Begriff nennen.', 'warnung'); return; }
+              steuerung.stopp(); steuerung.leeren();
+              erklaerDialog(text, {
+                einfuegen: function (e) {
+                  zustand.daten.erklaerungen.push({ id: neueId(), titel: e.begriff, text: e.text });
+                  merken(); liste.neuZeichnen();
+                },
+              });
+            },
+          }],
+        });
+        bereich.appendChild(el('div.karte-kopf', {}, [el('h2', { text: 'Erklärungen und Funktionsprinzipien' })]));
+        bereich.appendChild(liste.element);
+        bereich.appendChild(el('div', { style: 'margin-top:13px' }, [feld.element]));
+        return bereich;
+      }
+
+      function zeichneAlles() {
+        leere(inhaltsBereich);
+        listen.length = 0;
+        if (zustand.daten.warnung) inhaltsBereich.appendChild(hinweis(zustand.daten.warnung, 'warnung'));
+
+        inhaltsBereich.appendChild(textAbschnitt('Einleitung / Ausgangslage', 'einleitung', 'Warum wurde die Arbeit ausgeführt, was war der Zustand vorher?'));
+        inhaltsBereich.appendChild(textAbschnitt('Objekt und Anlage', 'anlage', 'Gebäude, Anlagenteil, Besonderheiten …'));
+        inhaltsBereich.appendChild(punktBereich({ beschriftung: 'Arbeitsschritte', feld: 'arbeitsschritte', leerText: 'Noch keine Arbeitsschritte – oben einsprechen.' }));
+        inhaltsBereich.appendChild(tabellenBereich({
+          beschriftung: 'Materialliste',
+          liste: zustand.daten.material,
+          spalten: [
+            { titel: 'Bezeichnung', feld: 'bezeichnung' },
+            { titel: 'Dimension', feld: 'dimension' },
+            { titel: 'Menge', feld: 'menge' },
+            { titel: 'Hinweis', feld: 'hinweis' },
+          ],
+          leerzeile: { bezeichnung: '', dimension: '', menge: '', hinweis: '' },
+        }));
+        inhaltsBereich.appendChild(tabellenBereich({
+          beschriftung: 'Werkzeugliste',
+          liste: zustand.daten.werkzeug,
+          spalten: [{ titel: 'Werkzeug', feld: 'bezeichnung' }, { titel: 'Zweck', feld: 'zweck' }],
+          leerzeile: { bezeichnung: '', zweck: '' },
+        }));
+        inhaltsBereich.appendChild(punktBereich({ beschriftung: 'Arbeitssicherheit', feld: 'arbeitssicherheit', leerText: 'Noch keine Sicherheitshinweise.', mitVertiefung: false }));
+        inhaltsBereich.appendChild(punktBereich({ beschriftung: 'Regelwerke und Normen', feld: 'normen', leerText: 'Noch keine Regelwerke erfasst.' }));
+        inhaltsBereich.appendChild(erklaerungsBereich());
+        inhaltsBereich.appendChild(zeichnungsBereich({
+          daten: zustand.daten, beiAenderung: merken, titel: function () { return zustand.titel; },
+        }).element);
+        inhaltsBereich.appendChild(textAbschnitt('Fazit', 'fazit', 'Ergebnis, Prüfung, Übergabe, was gelernt wurde …'));
+      }
+    }
+
+    /* ------------------------------------------------------------ Erklären */
+    var VORSCHLAEGE = ['Druckminderer', 'Sicherheitsventil', 'Membran-Ausdehnungsgefäß', 'Systemtrenner BA',
+      'Hydraulischer Abgleich', 'Legionellen', 'Pressfitting', 'Geruchsverschluss', 'Abwasserhebeanlage', 'Gas-Brennwertgerät'];
+
+    function ansichtErklaeren(id) {
+      leere(app);
+      var zustand = {
+        id: id && id !== 'neu' ? id : null,
+        titel: 'Neue Erklärung',
+        daten: { begriff: '', kurz: '', abschnitte: [], normen: [], stichworte: [], verlauf: [], tiefe: 1 },
+      };
+      var kopf, inhaltsBereich;
+
+      if (zustand.id) {
+        app.appendChild(laden('Erklärung wird geladen …'));
+        Speicher.lesen(zustand.id).then(function (bericht) {
+          if (!bericht) { leere(app).appendChild(hinweis('Erklärung nicht gefunden.', 'fehler')); return; }
+          zustand.titel = bericht.titel;
+          zustand.daten = Object.assign(zustand.daten, bericht.daten);
+          zustand.erstellt = bericht.erstellt;
+          aufbauen();
+        });
+      } else {
+        aufbauen();
+      }
+
+      function textVon() {
+        var d = zustand.daten;
+        var teile = [d.begriff, d.kurz];
+        (d.abschnitte || []).forEach(function (a) {
+          teile.push((a.titel + ': ' + (a.text || '')).trim());
+          (a.punkte || []).forEach(function (p) { teile.push('– ' + p); });
+        });
+        if ((d.normen || []).length) teile.push('Regelwerke: ' + d.normen.join(', '));
+        (d.verlauf || []).forEach(function (v) {
+          teile.push('Rückfrage: ' + v.frage);
+          teile.push((v.titel || 'Vertiefung') + ': ' + v.text);
+        });
+        return teile.filter(Boolean).join('\n\n');
+      }
+
+      function speichern() {
+        return Speicher.speichern({ id: zustand.id, typ: 'erklaerung', titel: zustand.titel, daten: zustand.daten, erstellt: zustand.erstellt })
+          .then(function (neu) {
+            zustand.id = neu;
+            kopf.status.textContent = 'gespeichert';
+            meldung('Gespeichert.', 'erfolg', 2200);
+          })
+          .catch(function (f) { meldung(f.message || 'Speichern fehlgeschlagen.', 'fehler'); });
+      }
+
+      function merken() { kopf.status.textContent = 'ungespeichert – über „Speichern“ sichern'; }
+
+      function aufbauen() {
+        leere(app);
+        kopf = berichtKopf({
+          titel: zustand.titel,
+          gespeichert: Boolean(zustand.id),
+          beiTitel: function (wert) { zustand.titel = wert; merken(); },
+          beiSpeichern: speichern,
+          aktionen: [
+            { text: 'Text kopieren', aufruf: function () { kopiere(textVon()); } },
+            { text: '🔊 Vorlesen', aufruf: function () { if (!vorlesen(textVon())) meldung('Vorlesen geht hier nicht.', 'warnung'); } },
+            { text: 'Stopp', aufruf: vorlesenStopp },
+          ],
+        });
+
+        var diktat = diktatFeld({
+          titel: 'Was soll erklärt werden?',
+          hilfe: 'Zum Beispiel: „Erkläre einen Druckminderer“ – danach beliebig nachfragen.',
+          platzhalter: 'Begriff oder Frage …',
+          beiBefehl: function (befehl) {
+            if (befehl.aktion === 'erklaeren') { erklaere(befehl.begriff || befehl.text || ''); return true; }
+            if (befehl.aktion === 'vertiefen') {
+              if (!zustand.daten.begriff) { meldung('Bitte zuerst einen Begriff erklären lassen.', 'warnung'); return true; }
+              if ((zustand.daten.tiefe || 1) < 3 && KI.da()) erklaere(zustand.daten.begriff, (zustand.daten.tiefe || 1) + 1);
+              else nachfrage('Bitte noch tiefer und mit Zahlenwerten erläutern.');
+              return true;
+            }
+            if (befehl.aktion === 'speichern') { speichern(); return true; }
+            return false;
+          },
+          aktionen: [
+            {
+              text: 'Erklären',
+              klasse: 'knopf-haupt',
+              aufruf: function (text, steuerung) {
+                if (!text) { meldung('Bitte einen Begriff nennen.', 'warnung'); return; }
+                steuerung.stopp(); steuerung.leeren();
+                return erklaere(text);
+              },
+            },
+            {
+              text: 'Als Rückfrage stellen',
+              klasse: 'knopf-still',
+              aufruf: function (text, steuerung) {
+                if (!text) return;
+                if (!zustand.daten.begriff) { meldung('Bitte zuerst einen Begriff erklären lassen.', 'warnung'); return; }
+                steuerung.stopp(); steuerung.leeren();
+                return nachfrage(text);
+              },
+            },
+          ],
+        });
+
+        inhaltsBereich = el('div');
+        app.appendChild(kopf.element);
+        app.appendChild(el('div', { style: 'margin-top:14px' }, [diktat.element]));
+        app.appendChild(el('div', { style: 'margin-top:14px' }, [inhaltsBereich]));
+        setzeErklaerHandler(function (text) { erklaerDialog(text, {}); });
+        zeichneAlles();
+      }
+
+      function erklaere(begriff, tiefe) {
+        leere(inhaltsBereich).appendChild(el('div.karte', {}, [laden('„' + begriff + '“ wird erklärt …')]));
+        return KI.erklaerung(begriff, tiefe || 1).then(function (ergebnis) {
+          zustand.daten = {
+            begriff: ergebnis.begriff,
+            kurz: ergebnis.kurz,
+            abschnitte: (ergebnis.abschnitte || []).map(function (a) { return Object.assign({ id: neueId() }, a); }),
+            normen: ergebnis.normen || [],
+            stichworte: ergebnis.stichworte || [],
+            verlauf: (tiefe || 1) === 1 ? [] : zustand.daten.verlauf,
+            tiefe: ergebnis.tiefe || tiefe || 1,
+            quelle: ergebnis.quelle,
+            warnung: ergebnis.warnung,
+            zeichnung: zustand.daten.zeichnung,
+          };
+          if (zustand.titel === 'Neue Erklärung' || !zustand.titel) {
+            zustand.titel = ergebnis.begriff;
+            kopf.titelFeld.value = zustand.titel;
+          }
+          merken();
+          zeichneAlles();
+        });
+      }
+
+      function nachfrage(frage) {
+        var kasten = el('div.karte', {}, [laden('Rückfrage wird beantwortet …')]);
+        inhaltsBereich.appendChild(kasten);
+        return KI.vertiefung({ begriff: zustand.daten.begriff || zustand.titel, frage: frage, bisher: textVon() })
+          .then(function (antwort) {
+            antwort.frage = frage;
+            antwort.id = neueId();
+            zustand.daten.verlauf.push(antwort);
+            merken();
+            zeichneAlles();
+          })
+          .catch(function () { kasten.remove(); });
+      }
+
+      function zeichneAlles() {
+        leere(inhaltsBereich);
+        var d = zustand.daten;
+
+        if (!d.begriff) {
+          inhaltsBereich.appendChild(el('section.karte', {}, [
+            el('div.karte-kopf', {}, [el('h2', { text: 'Häufig gefragt' })]),
+            el('p.klein.leise', { text: 'Antippen oder einsprechen.' }),
+            el('div.chip-liste', {}, VORSCHLAEGE.map(function (v) {
+              return el('button.chip.chip-blau', { type: 'button', text: v, onclick: function () { erklaere(v); } });
+            })),
+          ]));
+          return;
+        }
+
+        if (d.warnung) inhaltsBereich.appendChild(hinweis(d.warnung, 'warnung'));
+
+        inhaltsBereich.appendChild(el('section.karte', {}, [
+          el('div.karte-kopf', {}, [
+            el('h2', { text: d.begriff }),
+            el('div.rechts', {}, [
+              el('span.chip.mono.klein.' + (d.quelle === 'ki' ? 'chip-patina' : 'chip-kupfer'), {
+                text: d.quelle === 'ki' ? 'KI · Stufe ' + (d.tiefe || 1) : 'Fachdatenbank',
+              }),
+            ]),
+          ]),
+          el('p', { text: d.kurz, 'data-erklaerbar': '1', style: 'font-size:1.04rem' }),
+          el('div.knopf-reihe', {}, [
+            (d.tiefe || 1) < 3 && KI.da() ? el('button.knopf.knopf-kupfer', {
+              type: 'button', text: (d.tiefe || 1) === 1 ? 'Ausführlicher' : 'Noch ausführlicher',
+              onclick: function () { erklaere(d.begriff, (d.tiefe || 1) + 1); },
+            }) : null,
+            el('button.knopf.knopf-still', { type: 'button', text: 'Neu erklären', onclick: function () { erklaere(d.begriff, 1); } }),
+          ]),
+        ]));
+
+        (d.abschnitte || []).forEach(function (abschnitt) {
+          inhaltsBereich.appendChild(el('section.karte', {}, [
+            el('div.karte-kopf', {}, [
+              el('h3', { text: abschnitt.titel }),
+              el('div.rechts', {}, [
+                el('button.knopf.knopf-klein.knopf-still', {
+                  type: 'button', text: 'Genauer erläutern',
+                  onclick: function () {
+                    nachfrage('Erläutere genauer: ' + abschnitt.titel + ' – ' + (abschnitt.text || (abschnitt.punkte || []).join('; ')));
+                  },
+                }),
+                el('button.knopf.knopf-klein.knopf-still', {
+                  type: 'button', text: '🗑', title: 'Abschnitt löschen',
+                  onclick: function () {
+                    d.abschnitte = d.abschnitte.filter(function (a) { return a !== abschnitt; });
+                    merken(); zeichneAlles();
+                  },
+                }),
+              ]),
+            ]),
+            abschnitt.text ? el('p', { text: abschnitt.text, 'data-erklaerbar': '1' }) : null,
+            (abschnitt.punkte || []).length
+              ? el('ul', { 'data-erklaerbar': '1', style: 'margin:0;padding-left:19px' },
+                  abschnitt.punkte.map(function (p) { return el('li', { text: p, style: 'margin-bottom:3px' }); }))
+              : null,
+          ]));
+        });
+
+        if ((d.normen || []).length) {
+          inhaltsBereich.appendChild(el('section.karte', {}, [
+            el('div.karte-kopf', {}, [el('h3', { text: 'Regelwerke' })]),
+            el('div.chip-liste', {}, d.normen.map(function (n) { return el('span.chip.chip-patina', { text: n }); })),
+          ]));
+        }
+
+        (d.verlauf || []).forEach(function (eintrag) {
+          inhaltsBereich.appendChild(el('section.karte', {}, [
+            el('div.karte-kopf', {}, [
+              el('div', {}, [
+                el('div.klein.leise', { text: 'Rückfrage: ' + eintrag.frage }),
+                el('h3', { text: eintrag.titel || 'Vertiefung', style: 'margin:0' }),
+              ]),
+              el('div.rechts', {}, [
+                el('button.knopf.knopf-klein.knopf-still', {
+                  type: 'button', text: 'Noch genauer',
+                  onclick: function () { nachfrage('Noch genauer und mit Zahlenwerten: ' + eintrag.frage); },
+                }),
+                el('button.knopf.knopf-klein.knopf-still', {
+                  type: 'button', text: '🗑',
+                  onclick: function () {
+                    d.verlauf = d.verlauf.filter(function (v) { return v !== eintrag; });
+                    merken(); zeichneAlles();
+                  },
+                }),
+              ]),
+            ]),
+            el('p', { text: eintrag.text, 'data-erklaerbar': '1' }),
+            (eintrag.punkte || []).length
+              ? el('ul', { 'data-erklaerbar': '1', style: 'margin:0;padding-left:19px' },
+                  eintrag.punkte.map(function (p) { return el('li', { text: p }); }))
+              : null,
+          ]));
+        });
+
+        if ((d.stichworte || []).length) {
+          inhaltsBereich.appendChild(el('section.karte', {}, [
+            el('div.karte-kopf', {}, [el('h3', { text: 'Passt dazu' })]),
+            el('div.chip-liste', {}, d.stichworte.map(function (s) {
+              return el('button.chip.chip-blau', { type: 'button', text: s, onclick: function () { erklaerDialog(s, {}); } });
+            })),
+          ]));
+        }
+
+        inhaltsBereich.appendChild(el('details.karte', {}, [
+          el('summary', { text: 'Passende Zeichnung erstellen', style: 'cursor:pointer;font-weight:600' }),
+          el('div', { style: 'margin-top:11px' }, [
+            zeichnungsBereich({
+              daten: d, beiAenderung: merken, titel: function () { return d.begriff || zustand.titel; },
+            }).element,
+          ]),
+        ]));
+      }
+    }
+
+    /* ------------------------------------------------------------ Nachschlagen */
+    function ansichtNachschlagen(id) {
+      leere(app);
+      setzeErklaerHandler(function (text) { erklaerDialog(text, {}); });
+
+      if (id) { zeigeEintrag(id); return; }
+
+      var bereich = '';
+      var suchtext = '';
+      var stat = statistik();
+
+      app.appendChild(el('div', { style: 'margin-bottom:14px' }, [
+        el('h1', { text: 'Nachschlagen' }),
+        el('p.leise', {
+          text: 'Fachdatenbank zu Sanitär, Heizung, Gas, Lüftung, Klima und Versorgungstechnik – mit Funktionsprinzipien, Kennwerten, Formeln und Regelwerken.',
+        }),
+      ]));
+
+      var suche = diktatFeld({
+        titel: 'Begriff suchen',
+        hilfe: 'Zum Beispiel: „Druckminderer“, „hydraulischer Abgleich“, „Rückstauebene“.',
+        platzhalter: 'Suchbegriff …',
+        beiBefehl: function (befehl) {
+          if (befehl.aktion === 'erklaeren') { erklaerDialog(befehl.begriff || befehl.text || '', {}); return true; }
+          return false;
+        },
+        aktionen: [
+          { text: 'Suchen', klasse: 'knopf-haupt', aufruf: function (text, steuerung) { suchtext = text; steuerung.stopp(); zeichneErgebnis(); } },
+          { text: 'Alles anzeigen', klasse: 'knopf-still', aufruf: function (_t, steuerung) { suchtext = ''; steuerung.leeren(); zeichneErgebnis(); } },
+        ],
+      });
+
+      var tippTimer = null;
+      suche.textfeld.addEventListener('input', function () {
+        clearTimeout(tippTimer);
+        tippTimer = setTimeout(function () { suchtext = suche.hole(); zeichneErgebnis(); }, 320);
+      });
+
+      var bereichsLeiste = el('div.chip-liste', { style: 'margin-bottom:12px' });
+      var ergebnisBereich = el('div');
+      app.appendChild(suche.element);
+      app.appendChild(el('div', { style: 'margin-top:14px' }, [bereichsLeiste, ergebnisBereich]));
+
+      function zeichneBereiche() {
+        leere(bereichsLeiste);
+        bereichsLeiste.appendChild(el('button.chip' + (bereich === '' ? '.chip-blau' : ''), {
+          type: 'button', text: 'Alle (' + stat.gesamt + ')',
+          onclick: function () { bereich = ''; zeichneBereiche(); zeichneErgebnis(); },
+        }));
+        Object.keys(BEREICHE).forEach(function (b) {
+          bereichsLeiste.appendChild(el('button.chip' + (bereich === b ? '.chip-blau' : ''), {
+            type: 'button', text: BEREICHE[b] + ' (' + (stat.nachBereich[b] || 0) + ')',
+            onclick: function () { bereich = b; zeichneBereiche(); zeichneErgebnis(); },
+          }));
+        });
+      }
+
+      function zeichneErgebnis() {
+        leere(ergebnisBereich);
+        var eintraege;
+        if (suchtext) {
+          eintraege = sucheWissen(suchtext, { grenze: 25, bereich: bereich || undefined }).map(function (t) { return t.eintrag; });
+        } else {
+          eintraege = WISSENSBASIS.filter(function (e) { return !bereich || e.bereich === bereich; })
+            .slice()
+            .sort(function (a, b) { return a.begriff.localeCompare(b.begriff, 'de'); });
+        }
+
+        if (!eintraege.length) {
+          ergebnisBereich.appendChild(el('div.karte.leer', {}, [
+            el('p', { text: 'Kein Eintrag gefunden. Anderen Begriff versuchen – oder direkt erklären lassen.' }),
+            el('div.knopf-reihe', { style: 'justify-content:center' }, [
+              el('button.knopf.knopf-haupt', {
+                type: 'button', text: '„' + suchtext + '“ erklären lassen',
+                onclick: function () { erklaerDialog(suchtext, {}); },
+              }),
+            ]),
+          ]));
+          return;
+        }
+
+        ergebnisBereich.appendChild(el('p.klein.leise.mono', {
+          text: suchtext
+            ? eintraege.length + ' Treffer für „' + suchtext + '“ · ' + stat.gesamt + ' Einträge insgesamt'
+            : eintraege.length + ' von ' + stat.gesamt + ' Einträgen',
+        }));
+
+        var liste = el('div.raster.raster-2');
+        eintraege.forEach(function (eintrag) {
+          liste.appendChild(el('a.kachel', { href: '#/nachschlagen/' + eintrag.id, style: 'padding:13px' }, [
+            el('div.chip-liste', { style: 'margin-bottom:7px' }, [
+              el('span.chip.chip-blau.klein', { text: BEREICHE[eintrag.bereich] }),
+              el('span.chip.klein', { text: eintrag.kategorie }),
+            ]),
+            el('h3', { text: eintrag.begriff, style: 'margin-bottom:3px' }),
+            el('p.klein.leise', { text: eintrag.kurz, style: 'margin:0' }),
+          ]));
+        });
+        ergebnisBereich.appendChild(liste);
+      }
+
+      zeichneBereiche();
+      zeichneErgebnis();
+    }
+
+    function abschnitteVon(eintrag) {
+      var liste = [];
+      if (eintrag.funktion) liste.push({ titel: 'Funktionsprinzip', text: eintrag.funktion, punkte: [] });
+      if ((eintrag.aufbau || []).length) liste.push({ titel: 'Aufbau', text: '', punkte: eintrag.aufbau });
+      if ((eintrag.einsatz || []).length) liste.push({ titel: 'Einsatz und Einbau', text: '', punkte: eintrag.einsatz });
+      if ((eintrag.werte || []).length) liste.push({ titel: 'Kennwerte und Richtwerte', text: '', punkte: eintrag.werte });
+      if ((eintrag.formeln || []).length) {
+        liste.push({
+          titel: 'Berechnung', text: '',
+          punkte: eintrag.formeln.map(function (f) { return f.name + ': ' + f.formel + ' — ' + f.erklaerung; }),
+        });
+      }
+      if ((eintrag.hinweise || []).length) liste.push({ titel: 'Praxishinweise', text: '', punkte: eintrag.hinweise });
+      if ((eintrag.stoerungen || []).length) liste.push({ titel: 'Typische Fehlerbilder', text: '', punkte: eintrag.stoerungen });
+      return liste;
+    }
+
+    function zeigeEintrag(id) {
+      var eintrag = WISSEN_NACH_ID.get(id);
+      if (!eintrag) {
+        app.appendChild(hinweis('Zu diesem Begriff gibt es keinen Eintrag.', 'fehler'));
+        app.appendChild(el('div.knopf-reihe', { style: 'margin-top:12px' }, [
+          el('a.knopf.knopf-haupt', { href: '#/nachschlagen', text: 'Zurück zur Suche' }),
+        ]));
+        return;
+      }
+
+      function alsText() {
+        return [
+          eintrag.begriff, eintrag.kurz, eintrag.funktion,
+        ].concat(
+          (eintrag.aufbau || []).map(function (x) { return '- ' + x; }),
+          (eintrag.einsatz || []).map(function (x) { return '- ' + x; }),
+          (eintrag.werte || []).map(function (x) { return '- ' + x; }),
+          (eintrag.formeln || []).map(function (f) { return f.name + ': ' + f.formel + ' (' + f.erklaerung + ')'; }),
+          (eintrag.hinweise || []).map(function (x) { return '- ' + x; }),
+          (eintrag.stoerungen || []).map(function (x) { return '- ' + x; }),
+          [(eintrag.normen || []).length ? 'Regelwerke: ' + eintrag.normen.join(', ') : '']
+        ).filter(Boolean).join('\n');
+      }
+
+      app.appendChild(el('div.knopf-reihe', { style: 'margin-bottom:12px' }, [
+        el('a.knopf.knopf-still.knopf-klein', { href: '#/nachschlagen', text: '← Zurück zur Suche' }),
+      ]));
+
+      app.appendChild(el('section.karte', {}, [
+        el('div.chip-liste', { style: 'margin-bottom:9px' }, [
+          el('span.chip.chip-blau', { text: BEREICHE[eintrag.bereich] }),
+          el('span.chip', { text: eintrag.kategorie }),
+        ]),
+        el('h1', { text: eintrag.begriff, style: 'margin-bottom:5px' }),
+        el('p', { text: eintrag.kurz, 'data-erklaerbar': '1', style: 'font-size:1.05rem' }),
+        (eintrag.synonyme || []).length ? el('p.klein.leise', { text: 'Auch genannt: ' + eintrag.synonyme.join(', ') }) : null,
+        el('div.knopf-reihe', { style: 'margin-top:8px' }, [
+          el('button.knopf.knopf-haupt', {
+            type: 'button', text: KI.da() ? 'Von der KI erklären lassen' : 'Erklärung öffnen',
+            onclick: function () { erklaerDialog(eintrag.begriff, {}); },
+          }),
+          el('button.knopf', { type: 'button', text: '🔊 Vorlesen', onclick: function () {
+            if (!vorlesen(alsText())) meldung('Vorlesen geht in diesem Browser nicht.', 'warnung');
+          } }),
+          el('button.knopf.knopf-still', { type: 'button', text: 'Stopp', onclick: vorlesenStopp }),
+          el('button.knopf.knopf-still', { type: 'button', text: 'Text kopieren', onclick: function () { kopiere(alsText()); } }),
+          el('button.knopf.knopf-still', {
+            type: 'button', text: 'Als Erklärung speichern',
+            onclick: function () {
+              Speicher.speichern({
+                typ: 'erklaerung', titel: eintrag.begriff,
+                daten: {
+                  begriff: eintrag.begriff, kurz: eintrag.kurz,
+                  abschnitte: abschnitteVon(eintrag).map(function (a) { return Object.assign({ id: neueId() }, a); }),
+                  normen: eintrag.normen || [],
+                  stichworte: (eintrag.verwandt || []).map(function (v) {
+                    var e = WISSEN_NACH_ID.get(v);
+                    return e ? e.begriff : null;
+                  }).filter(Boolean),
+                  verlauf: [], tiefe: 1, quelle: 'datenbank',
+                },
+              }).then(function () { meldung('Unter „Meine Berichte“ gespeichert.', 'erfolg'); })
+                .catch(function (f) { meldung(f.message || 'Speichern fehlgeschlagen.', 'fehler'); });
+            },
+          }),
+        ]),
+      ]));
+
+      abschnitteVon(eintrag).forEach(function (abschnitt) {
+        app.appendChild(el('section.karte', {}, [
+          el('div.karte-kopf', {}, [
+            el('h2', { text: abschnitt.titel }),
+            el('div.rechts', {}, [
+              el('button.knopf.knopf-klein.knopf-still', {
+                type: 'button', text: 'Genauer erläutern',
+                onclick: function () { erklaerDialog(eintrag.begriff + ': ' + abschnitt.titel, {}); },
+              }),
+            ]),
+          ]),
+          abschnitt.text ? el('p', { text: abschnitt.text, 'data-erklaerbar': '1' }) : null,
+          (abschnitt.punkte || []).length
+            ? el('ul', { 'data-erklaerbar': '1', style: 'margin:0;padding-left:19px' },
+                abschnitt.punkte.map(function (p) { return el('li', { text: p, style: 'margin-bottom:3px' }); }))
+            : null,
+        ]));
+      });
+
+      (eintrag.vertiefungen || []).forEach(function (v) {
+        app.appendChild(el('details.karte', {}, [
+          el('summary', { text: v.frage, style: 'cursor:pointer;font-weight:600' }),
+          el('p', { text: v.text, 'data-erklaerbar': '1', style: 'margin-top:9px' }),
+        ]));
+      });
+
+      if ((eintrag.normen || []).length) {
+        app.appendChild(el('section.karte', {}, [
+          el('div.karte-kopf', {}, [el('h2', { text: 'Regelwerke' })]),
+          el('div.chip-liste', {}, eintrag.normen.map(function (n) { return el('span.chip.chip-patina', { text: n }); })),
+        ]));
+      }
+
+      var verwandte = (eintrag.verwandt || []).map(function (v) { return WISSEN_NACH_ID.get(v); }).filter(Boolean);
+      if (verwandte.length) {
+        app.appendChild(el('section.karte', {}, [
+          el('div.karte-kopf', {}, [el('h2', { text: 'Passt dazu' })]),
+          el('div.chip-liste', {}, verwandte.map(function (v) {
+            return el('a.chip.chip-blau', { href: '#/nachschlagen/' + v.id, text: v.begriff });
+          })),
+        ]));
+      }
+    }
+
+    /* ==================================================================
+       Navigation
+       ================================================================== */
+    var NAV = [
+      { pfad: '#/', text: 'Start' },
+      { pfad: '#/berichtsheft/neu', text: 'Berichtsheft' },
+      { pfad: '#/fachbericht/neu', text: 'Fachbericht' },
+      { pfad: '#/erklaeren/neu', text: 'Erklären' },
+      { pfad: '#/nachschlagen', text: 'Nachschlagen' },
+    ];
+
+    function zeichneNav() {
+      var nav = leere($('#nav'));
+      var aktuell = location.hash || '#/';
+      NAV.forEach(function (punkt) {
+        var basis = punkt.pfad.replace('/neu', '');
+        var aktiv = aktuell === punkt.pfad || (punkt.pfad !== '#/' && aktuell.indexOf(basis) === 0);
+        nav.appendChild(el('a', { href: punkt.pfad, text: punkt.text, 'aria-current': aktiv ? 'page' : null }));
+      });
+    }
+
+    function route() {
+      setzeErklaerHandler(null);
+      $('#erklaer-blase').hidden = true;
+      overlayZu();
+      zeichneNav();
+
+      var teile = (location.hash || '#/').replace(/^#\/?/, '').split('/');
+      var bereich = teile[0] || '';
+      var id = teile[1] || '';
+
+      try {
+        if (bereich === '') ansichtStart();
+        else if (bereich === 'berichtsheft') ansichtBerichtsheft(id || 'neu');
+        else if (bereich === 'fachbericht') ansichtFachbericht(id || 'neu');
+        else if (bereich === 'erklaeren') ansichtErklaeren(id || 'neu');
+        else if (bereich === 'nachschlagen') ansichtNachschlagen(id || '');
+        else {
+          leere(app).appendChild(hinweis('Diese Seite gibt es nicht.', 'warnung'));
+          app.appendChild(el('div.knopf-reihe', { style: 'margin-top:12px' }, [
+            el('a.knopf.knopf-haupt', { href: '#/', text: 'Zur Startseite' }),
+          ]));
+        }
+      } catch (f) {
+        leere(app).appendChild(hinweis(f && f.message ? f.message : 'Unerwarteter Fehler.', 'fehler'));
+      }
+      window.scrollTo({ top: 0 });
+    }
+
+    /* ---------------------------------------------------------- Thema */
+    var THEMA = 'shk-thema';
+    function themaLesen() {
+      try { return localStorage.getItem(THEMA) || 'auto'; } catch (e) { return 'auto'; }
+    }
+    function themaAnwenden(thema) {
+      if (thema === 'auto') document.documentElement.removeAttribute('data-theme');
+      else document.documentElement.setAttribute('data-theme', thema);
+      $('#thema').textContent = thema === 'dark' ? '☾' : thema === 'light' ? '☀' : '◐';
+      $('#thema').title = thema === 'dark' ? 'Dunkel' : thema === 'light' ? 'Hell' : 'Automatisch';
+    }
+    $('#thema').addEventListener('click', function () {
+      var folge = ['auto', 'light', 'dark'];
+      var naechstes = folge[(folge.indexOf(themaLesen()) + 1) % folge.length];
+      try { localStorage.setItem(THEMA, naechstes); } catch (e) { /* egal */ }
+      themaAnwenden(naechstes);
+    });
+
+    /* ---------------------------------------------------------- Start */
+    themaAnwenden(themaLesen());
+    window.addEventListener('hashchange', route);
+    route();
+
+    Plattform.init().then(function () {
+      // Ansicht neu aufbauen, sobald KI und Speicher bekannt sind
+      route();
+    });
+  })();
+</script>

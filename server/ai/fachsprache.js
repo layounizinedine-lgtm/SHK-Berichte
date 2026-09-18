@@ -171,15 +171,31 @@ function zollErsetzen(text, treffer, merke) {
   return out;
 }
 
+// Ältere Browser (Safari vor 16.4) kennen keinen Lookbehind – dann wird das
+// Zeichen vor dem Begriff als Gruppe mitgenommen und wieder eingesetzt.
+const LOOKBEHIND_MOEGLICH = (() => {
+  try {
+    new RegExp('(?<!x)y');
+    return true;
+  } catch {
+    return false;
+  }
+})();
+
+function aliasRegel(alias) {
+  const kern = escapeRegExp(alias).replace(/\s+/g, '\\s+');
+  const ende = '(?:s|n|en|e)?(?![\\wäöüßÄÖÜ])';
+  return LOOKBEHIND_MOEGLICH
+    ? new RegExp(`(?<![\\wäöüßÄÖÜ])${kern}${ende}`, 'gi')
+    : new RegExp(`(^|[^\\wäöüßÄÖÜ])${kern}${ende}`, 'gi');
+}
+
 /** Glossar-Regeln aus den Aliassen erzeugen (längste Aliasse zuerst). */
 const GLOSSAR_REGELN = GLOSSAR.flatMap((eintrag) =>
   eintrag.aliases.map((alias) => ({
     alias,
     laenge: alias.length,
-    re: new RegExp(
-      `(?<![\\wäöüßÄÖÜ])${escapeRegExp(alias).replace(/\s+/g, '\\s+')}(?:s|n|en|e)?(?![\\wäöüßÄÖÜ])`,
-      'gi',
-    ),
+    re: aliasRegel(alias),
     eintrag,
   })),
 ).sort((a, b) => b.laenge - a.laenge);
@@ -240,14 +256,16 @@ export function normalisiere(eingabe) {
 
   // 3. Begriffsglossar
   for (const regel of GLOSSAR_REGELN) {
-    text = text.replace(regel.re, (roh) => {
+    text = text.replace(regel.re, (...args) => {
+      const roh = String(args[0]);
+      const vorsatz = LOOKBEHIND_MOEGLICH ? '' : String(args[1] || '');
       treffer.push({
-        roh: roh.trim(),
+        roh: roh.slice(vorsatz.length).trim(),
         fach: regel.eintrag.fach,
         kategorie: regel.eintrag.kategorie,
         eintrag: regel.eintrag,
       });
-      return merke(regel.eintrag.fach);
+      return vorsatz + merke(regel.eintrag.fach);
     });
   }
 
