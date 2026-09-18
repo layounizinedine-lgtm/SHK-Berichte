@@ -1,10 +1,21 @@
 /**
- * Baut die Web-App als einzelne HTML-Seite.
+ * Baut die Web-App als einzelne HTML-Seite – in zwei Varianten:
+ *
+ *   1. vorlage.html    -> dist/shk-berichte.html
+ *      Für claude.ai: KI über die Sample-Fähigkeit (Konto des Nutzers),
+ *      Speicherung privat je Nutzer über die Artifact-Datenbank.
+ *
+ *   2. standalone.html -> dist/shk-berichte-standalone.html
+ *      Eigenständig, selbst hostbar (Netlify/Vercel/GitHub Pages/eigener
+ *      Webspace): KI über einen vom Nutzer selbst hinterlegten
+ *      Anthropic-API-Schlüssel (direkter Browser-Aufruf, Schlüssel bleibt
+ *      im localStorage dieser Seite), Speicherung nur im Browser.
  *
  * Die Fachsprache-Engine und die Fachdatenbank werden aus server/ai/
- * übernommen – eine Quelle für Server-App und Web-App. Die ES-Module werden
- * dabei zu einem Browser-Bündel zusammengefasst (import/export entfernt,
- * alles landet in einem gemeinsamen Gültigkeitsbereich).
+ * übernommen – eine Quelle für Server-App und beide Web-App-Varianten.
+ * Die ES-Module werden dabei zu einem Browser-Bündel zusammengefasst
+ * (import/export entfernt, alles landet in einem gemeinsamen
+ * Gültigkeitsbereich).
  *
  * Aufruf: node webapp/build.mjs
  */
@@ -29,6 +40,11 @@ const MODULE = [
   'server/ai/fachsprache.js',
   'server/ai/svg.js',
   'server/ai/offline.js',
+];
+
+const ZIELE = [
+  { vorlage: 'vorlage.html', ausgabe: 'shk-berichte.html' },
+  { vorlage: 'standalone.html', ausgabe: 'shk-berichte-standalone.html' },
 ];
 
 /** Entfernt import-/export-Anweisungen, ohne den restlichen Code zu verändern. */
@@ -59,20 +75,23 @@ function baueMotor() {
   return teile.join('\n\n');
 }
 
-function baueSeite() {
-  const vorlage = fs.readFileSync(path.join(HIER, 'vorlage.html'), 'utf8');
+function baueSeite(vorlageDatei, motor) {
+  const vorlage = fs.readFileSync(path.join(HIER, vorlageDatei), 'utf8');
   if (!vorlage.includes('/*__MOTOR__*/')) {
-    throw new Error('In der Vorlage fehlt die Marke /*__MOTOR__*/');
+    throw new Error(`In ${vorlageDatei} fehlt die Marke /*__MOTOR__*/`);
   }
-  const motor = baueMotor();
   // $ in der Ersetzung schützen (Template-Literale im Motor enthalten $-Zeichen)
   return vorlage.replace('/*__MOTOR__*/', () => motor);
 }
 
-const ziel = path.join(HIER, 'dist', 'shk-berichte.html');
-fs.mkdirSync(path.dirname(ziel), { recursive: true });
-const seite = baueSeite();
-fs.writeFileSync(ziel, seite);
+const motor = baueMotor();
+const zielVerzeichnis = path.join(HIER, 'dist');
+fs.mkdirSync(zielVerzeichnis, { recursive: true });
 
-const kb = (Buffer.byteLength(seite) / 1024).toFixed(0);
-console.log(`Web-App gebaut: ${path.relative(WURZEL, ziel)} (${kb} kB)`);
+for (const { vorlage, ausgabe } of ZIELE) {
+  const seite = baueSeite(vorlage, motor);
+  const ziel = path.join(zielVerzeichnis, ausgabe);
+  fs.writeFileSync(ziel, seite);
+  const kb = (Buffer.byteLength(seite) / 1024).toFixed(0);
+  console.log(`Web-App gebaut: ${path.relative(WURZEL, ziel)} (${kb} kB)`);
+}

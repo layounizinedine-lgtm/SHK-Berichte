@@ -36,22 +36,53 @@ dem Server – in der App wird nie etwas eingegeben oder konfiguriert.
 
 ---
 
-## Zwei Wege, die App zu nutzen
+## Drei Wege, die App zu nutzen
 
-| | Web-App (claude.ai) | Eigener Server |
-| --- | --- | --- |
-| Start | Link öffnen, nichts einrichten | `npm start` auf eigenem Rechner/Server |
-| KI | über das Claude-Konto des Nutzers | über den Serverschlüssel in der `.env` |
-| Speicherung | privat je Nutzer in der Artifact-Datenbank | SQLite im eigenen Konto |
-| Diktat | Browser-Spracherkennung (im eingebetteten Fenster teils gesperrt) | voll, mit eigener Mikrofon-Freigabe |
-| Aufbau | eine Seite aus `webapp/` (`node webapp/build.mjs`) | `server/` + `public/` |
+| | Web-App (claude.ai) | Eigenständige Datei (selbst gehostet) | Eigener Server |
+| --- | --- | --- | --- |
+| Start | Link öffnen, nichts einrichten | Datei bei Netlify/Vercel/GitHub Pages hochladen | `npm start` auf eigenem Rechner/Server |
+| KI | über das Claude-Konto des Nutzers | eigener Anthropic-API-Schlüssel, direkt aus dem Browser | über den Serverschlüssel in der `.env` |
+| Schlüsseleingabe | keine | einmalig im ⚙-Menü, bleibt im `localStorage` der Seite | keine (liegt in der `.env` des Servers) |
+| Speicherung | privat je Nutzer in der Artifact-Datenbank | nur im Browser (`localStorage`), Export/Import als JSON | SQLite im eigenen Konto |
+| Diktat | Browser-Spracherkennung (im eingebetteten Fenster teils gesperrt) | voll, mit eigener Mikrofon-Freigabe | voll, mit eigener Mikrofon-Freigabe |
+| Aufbau | `webapp/vorlage.html` | `webapp/standalone.html` | `server/` + `public/` |
 
-Beide teilen sich dieselbe Fachsprache-Engine und dieselbe Fachdatenbank aus `server/ai/` –
-das Build-Skript bündelt sie für die Web-App in eine einzelne HTML-Datei.
+Alle drei teilen sich dieselbe Fachsprache-Engine und dieselbe Fachdatenbank aus `server/ai/` –
+ein Build-Skript bündelt sie in die jeweilige Web-App-Datei.
 
 ```bash
-node webapp/build.mjs      # erzeugt webapp/dist/shk-berichte.html
+node webapp/build.mjs
+# erzeugt:
+#   webapp/dist/shk-berichte.html              (für claude.ai)
+#   webapp/dist/shk-berichte-standalone.html   (zum Selbst-Hosten)
 ```
+
+### Die eigenständige Datei selbst hosten
+
+`webapp/dist/shk-berichte-standalone.html` ist eine einzige HTML-Datei ohne Abhängigkeiten –
+sie lässt sich bei jedem Anbieter hosten, der statische Dateien ausliefert:
+
+- **Netlify / Vercel:** die Datei (ggf. in `index.html` umbenannt) per Drag & Drop hochladen,
+  oder das Repository verbinden und `webapp/dist/` als Veröffentlichungsordner angeben.
+- **GitHub Pages:** die Datei als `index.html` in einen Branch legen und Pages darauf zeigen lassen.
+- **Eigener Webspace:** die Datei per FTP/SFTP hochladen – fertig.
+
+Beim ersten Öffnen läuft die App sofort im **Fachmodus** (Fachsprache-Engine + Fachdatenbank,
+kein KI-Feinschliff). Für volle KI-Texte oben rechts auf das Zahnrad ⚙ tippen und einen
+eigenen Anthropic-API-Schlüssel eintragen (kostenlos erstellbar unter
+[console.anthropic.com](https://console.anthropic.com/settings/keys)). Der Schlüssel:
+
+- bleibt ausschließlich im `localStorage` dieser einen Seite (im eigenen Browser),
+- wird bei jedem KI-Aufruf direkt an `api.anthropic.com` gesendet – nie an einen anderen Server,
+- kostet nur die üblichen API-Gebühren des eigenen Anthropic-Kontos,
+- lässt sich jederzeit im selben Dialog ändern oder entfernen.
+
+Da es keine Konten gibt, liegen die Berichte nur im Browser dieses Geräts. Auf der Startseite
+lassen sie sich als JSON exportieren und auf einem anderen Gerät/Browser wieder importieren.
+
+⚠️ Wer die Datei über eine eigene Domain veröffentlicht, sollte HTTPS verwenden – sowohl die
+Spracherkennung des Browsers als auch der direkte API-Aufruf funktionieren über eine unverschlüsselte
+`http://`-Verbindung nicht zuverlässig bzw. gar nicht (Ausnahme: `localhost` beim lokalen Testen).
 
 ---
 
@@ -187,9 +218,10 @@ public/
   js/                 Module: api, ui, speech, store, components
   js/views/           Anmeldung, Start, Berichtsheft, Fachbericht, Wissen, Nachschlagen, Konto
 webapp/
-  vorlage.html        Web-App als eine Seite (Oberfläche + Plattform-Anbindung)
-  build.mjs           bündelt Engine und Fachdatenbank in die Seite
-  dist/               erzeugte Seite zum Veröffentlichen
+  vorlage.html        Web-App für claude.ai (Oberfläche + Claude-Plattform-Anbindung)
+  standalone.html     eigenständige Web-App (Oberfläche + eigener API-Schlüssel, localStorage)
+  build.mjs           bündelt Engine und Fachdatenbank in beide Seiten
+  dist/               erzeugte Seiten zum Veröffentlichen
 test/                 Tests (node --test)
 data/                 Datenbank (wird angelegt, nicht im Repository)
 ```
