@@ -1,3 +1,8 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>SHK-Berichte</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
@@ -419,6 +424,8 @@
     .punkt { background: none; border: 0; padding: 2px 0; }
   }
 </style>
+</head>
+<body>
 
 <header class="kopf">
   <div class="kopf-innen">
@@ -1753,17 +1760,6 @@
         app.appendChild(el('div', { style: 'margin-top:14px' }, [hinweisBereich]));
         app.appendChild(el('div', { style: 'margin-top:14px' }, [inhaltsBereich]));
 
-        var zeichnung = zeichnungsBereich({
-          daten: zustand.daten,
-          beiAenderung: merken,
-          titel: function () { return zustand.titel; },
-        });
-        var klapp = el('details.karte', { style: 'margin-top:14px' }, [
-          el('summary', { text: 'Zeichnung zum Berichtsheft (optional)', style: 'cursor:pointer;font-weight:600' }),
-          el('div', { style: 'margin-top:11px' }, [zeichnung.element]),
-        ]);
-        app.appendChild(klapp);
-
         setzeErklaerHandler(function (text) { erklaerDialog(text, {}); });
         zeichneAlles();
       }
@@ -1823,13 +1819,8 @@
             return true;
           }
           case 'zeichnung':
-            return KI.zeichnung(befehl.begriff || befehl.text || zustand.titel, zustand.titel).then(function (ergebnis) {
-              zustand.daten.zeichnung = ergebnis;
-              merken();
-              aufbauen();
-              meldung('Zeichnung erstellt.', 'erfolg');
-              return true;
-            });
+            meldung('Zeichnungen gibt es nur im Fachbericht.', 'warnung');
+            return true;
           case 'titel':
             if (befehl.text) { zustand.titel = befehl.text; kopf.titelFeld.value = befehl.text; merken(); }
             return true;
@@ -3018,3 +3009,5 @@
     });
   })();
 </script>
+</body>
+</html>
