@@ -25,6 +25,17 @@ test('Berichtsheft wird nach Wochentagen getrennt', () => {
   assert.ok(e.tage[1].eintraege[0].material.some((m) => /Kupferrohr 22/.test(m)));
 });
 
+test('Berichtsheft formuliert Heizkörperarbeiten fachgerecht und fragt bei fehlendem Typ nach', () => {
+  const e = offlineBerichtsheft('Demontage Heizkörper, danach neu Montage');
+  assert.match(e.tage[0].eintraege[0].titel, /Heizkörper/);
+  assert.ok(!e.tage[0].eintraege[0].punkte.some((p) => /^(Ein\s)?Heizkörper (ist|gibt)/i.test(p)), 'Keine Lexikon-Erklärung in den Tätigkeitspunkten');
+  assert.ok(e.hinweise.some((h) => /Heizkörpertyp nicht genannt/.test(h)));
+
+  const mitTyp = offlineBerichtsheft('Demontage 200cm Gussheizkörper, danach neuen Gussheizkörper montiert');
+  assert.match(mitTyp.tage[0].eintraege[0].titel, /Gussheizkörper/);
+  assert.ok(!mitTyp.hinweise.some((h) => /Heizkörpertyp nicht genannt/.test(h)));
+});
+
 test('Diktat ohne Wochentag landet unter "Ohne Zuordnung"', () => {
   const e = offlineBerichtsheft('Waschtisch montiert und Eckventile gehanft');
   assert.equal(e.tage[0].tag, 'Ohne Zuordnung');

@@ -607,7 +607,46 @@ const GLOSSAR = [
   { aliases: ['frischwasserstation', 'fwst', 'wohnungsstation'], fach: 'Frischwasserstation', kategorie: 'bauteil' },
   { aliases: ['heizkreisverteiler', 'verteiler', 'fußbodenheizungsverteiler'], fach: 'Heizkreisverteiler', kategorie: 'bauteil', normen: ['DIN EN 1264'] },
   { aliases: ['fußbodenheizung', 'fbh', 'flächenheizung'], fach: 'Fußbodenheizung (Flächenheizung)', kategorie: 'bauteil', normen: ['DIN EN 1264'] },
-  { aliases: ['heizkörper', 'radiator', 'rippe'], fach: 'Heizkörper', kategorie: 'bauteil' },
+  {
+    aliases: ['gussheizkörper', 'guss heizkörper', 'gußheizkörper', 'guß heizkörper', 'heizkörper aus guss', 'heizkörper aus guß', 'gusseiserner heizkörper', 'gußeiserner heizkörper', 'gusseisenheizkörper'],
+    fach: 'Gussheizkörper', kategorie: 'bauteil',
+    werkzeug: ['Rohrzange', 'Wasserpumpenzange', 'Auffangwanne bzw. Restwasserbehälter'],
+    material: ['Dichtungssatz für Heizkörperanschluss', 'Entlüftungsventil'],
+    normen: ['DIN EN 12828'],
+    hinweis: 'Gussheizkörper sind schwer und spröde – beim Aus- und Einbau Tragehilfe bzw. zweite Person einsetzen und Anschlussgewinde nicht überdrehen; fachgerechte Entsorgung als Alt-/Schrottmetall.',
+  },
+  {
+    aliases: ['röhrenheizkörper', 'röhren heizkörper', 'röhrenradiator', 'röhren radiator'],
+    fach: 'Röhrenheizkörper (Röhrenradiator)', kategorie: 'bauteil',
+    werkzeug: ['Rohrzange', 'Wasserpumpenzange'],
+    material: ['Dichtungssatz für Heizkörperanschluss'],
+    normen: ['DIN EN 442'],
+  },
+  {
+    aliases: ['plattenheizkörper', 'platten heizkörper'],
+    fach: 'Plattenheizkörper', kategorie: 'bauteil',
+    werkzeug: ['Rohrzange', 'Wasserpumpenzange'],
+    material: ['Dichtungssatz für Heizkörperanschluss'],
+    normen: ['DIN EN 442', 'DIN EN 12828'],
+  },
+  {
+    aliases: ['kompaktheizkörper', 'kompakt heizkörper'],
+    fach: 'Kompaktheizkörper', kategorie: 'bauteil',
+    werkzeug: ['Rohrzange', 'Wasserpumpenzange'],
+    material: ['Dichtungssatz für Heizkörperanschluss'],
+    normen: ['DIN EN 442', 'DIN EN 12828'],
+  },
+  {
+    aliases: ['designheizkörper', 'design heizkörper', 'badheizkörper', 'bad heizkörper', 'handtuchheizkörper', 'handtuchtrockner'],
+    fach: 'Design-/Badheizkörper (Handtuchheizkörper)', kategorie: 'bauteil',
+    werkzeug: ['Rohrzange', 'Wasserpumpenzange'],
+    material: ['Dichtungssatz für Heizkörperanschluss'],
+    normen: ['DIN EN 442'],
+  },
+  {
+    aliases: ['heizkörper', 'radiator', 'rippe'], fach: 'Heizkörper', kategorie: 'bauteil',
+    hinweis: 'Heizkörpertyp nicht genannt – bitte ergänzen (Guss-, Röhren-, Platten-, Kompakt- oder Designheizkörper) für einen präziseren Eintrag.',
+  },
   { aliases: ['hebeanlage', 'abwasserhebeanlage', 'pumpstation'], fach: 'Abwasserhebeanlage', kategorie: 'bauteil', normen: ['DIN EN 12050'] },
   { aliases: ['rückstauverschluss', 'rückstauklappe'], fach: 'Rückstauverschluss', kategorie: 'bauteil', normen: ['DIN EN 13564'] },
   { aliases: ['siphon', 'geruchsverschluss', 'geruchverschluss'], fach: 'Geruchsverschluss (Siphon)', kategorie: 'bauteil' },
@@ -664,6 +703,9 @@ Beispiele für den erwarteten Stil:
 - "halbzoll Eckventil" => "Eckventil DN 15 (1/2 Zoll)"
 - "abgedrückt" => "Dichtheits- und Belastungsprüfung nach DIN EN 806-4 durchgeführt"
 - "Presse" => "Akku-Pressmaschine mit Pressbacke (Kontur M bzw. V)"
+- "Demontage Heizkörper, danach neu Montage" (Typ vom Azubi genannt, z. B. Guss) =>
+  "Demontage eines Gussheizkörpers, fachgerechte Entsorgung als Alt-/Schrottmetall;
+  Montage eines neuen Heizkörpers, Dichtheits- und Entlüftungsprüfung nach Wiederbefüllung."
 
 Verbindliche Regeln:
 1. Nennweiten und Maße immer fachlich schreiben: Guss/Kunststoff-Abfluss mit "DN",
@@ -685,6 +727,9 @@ Verbindliche Regeln:
    (entgraten, Einstecktiefe prüfen, PSA tragen) dürfen ergänzt werden.
 6. Sachlich, in der 3. Person / Nominalstil, keine Werbesprache, keine Emojis.
 7. Antworte ausschließlich auf Deutsch.
+8. Fehlt eine für die Fachsprache nötige Angabe (z. B. bei "Heizkörper" der Typ – Guss-, Röhren-,
+   Platten-, Kompakt- oder Designheizkörper), erfinde sie nicht. Formuliere stattdessen eine kurze
+   Rückfrage dazu.
 `.trim();
 
 const SYSTEM_BERICHTSHEFT = `${FACHSPRACHE_REGELN}
@@ -693,7 +738,12 @@ Du erstellst Einträge für das Berichtsheft (Ausbildungsnachweis) eines Anlagen
 Jeder Eintrag ist kurz, präzise und im Nominalstil ("Montage von ...", "Demontage von ...",
 "Dichtheitsprüfung an ..."). Pro Tag eine Überschrift und 2 bis 6 Tätigkeitspunkte.
 Wenn im Diktat Wochentage genannt werden, ordne die Tätigkeiten diesen Tagen zu.
-Ohne Wochentag: alles dem Tag "Ohne Zuordnung" zuweisen.`;
+Ohne Wochentag: alles dem Tag "Ohne Zuordnung" zuweisen.
+
+Wichtig: Erkläre hier keine Fachbegriffe (kein Lexikontext, keine Definitionen wie
+"Ein Heizkörper ist ..."). Forme ausschließlich die geschilderte Tätigkeit fachsprachlich um.
+Rückfragen zu fehlenden Angaben (siehe Regel 8) gehören ins Feld "hinweise", nicht in die
+Tätigkeitspunkte.`;
 
 const SYSTEM_FACHBERICHT = `${FACHSPRACHE_REGELN}
 
@@ -4502,11 +4552,41 @@ function rohrText(werkstoff, dm) {
   }
 }
 
+/** Heizkörpertyp aus dem gesprochenen Typwort ableiten (für Baulänge-Angaben). */
+function heizkoerperTyp(typWort) {
+  const w = String(typWort || '').toLowerCase();
+  if (/^(guss|guß)/.test(w)) return { fach: 'Gussheizkörper', werkstoff: 'heizkoerper_guss' };
+  if (/^(röhren|roehren)/.test(w)) return { fach: 'Röhrenheizkörper (Röhrenradiator)', werkstoff: 'heizkoerper_roehren' };
+  if (/^platten/.test(w)) return { fach: 'Plattenheizkörper', werkstoff: 'heizkoerper_platten' };
+  if (/^kompakt/.test(w)) return { fach: 'Kompaktheizkörper', werkstoff: 'heizkoerper_kompakt' };
+  if (/^(design|handtuch|bad)/.test(w)) return { fach: 'Design-/Badheizkörper (Handtuchheizkörper)', werkstoff: 'heizkoerper_design' };
+  return { fach: 'Heizkörper', werkstoff: 'heizkoerper_unbekannt' };
+}
+function heizkoerperFach(typWort, laengeCm) {
+  const { fach } = heizkoerperTyp(typWort);
+  return laengeCm ? `${fach} (Baulänge ${laengeCm} cm)` : fach;
+}
+const HEIZKOERPER_TYPWORT = '(guss|guß|gusseisern\\w*|gußeisern\\w*|röhren\\w*|roehren\\w*|platten\\w*|kompakt\\w*|design\\w*|handtuch\\w*|bad)';
+
 /**
  * Dimensionsregeln. Reihenfolge ist wichtig: spezielle Regeln zuerst.
  * Jede Regel liefert Fachtext + Kategorie für die Trefferliste.
  */
 const DIMENSIONS_REGELN = [
+  // "200cm Gussheizkörper" / "200 cm Heizkörper"
+  {
+    re: new RegExp(`\\b(\\d{2,3})\\s*(?:cm|zentimeter)\\s*${HEIZKOERPER_TYPWORT}?\\s*heizk[oö]rper\\w*\\b`, 'gi'),
+    fach: (m) => heizkoerperFach(m[2], m[1]),
+    kategorie: 'bauteil',
+    werkstoff: (m) => heizkoerperTyp(m[2]).werkstoff,
+  },
+  // "Gussheizkörper 200cm" / "Heizkörper mit 200 cm"
+  {
+    re: new RegExp(`\\b${HEIZKOERPER_TYPWORT}?\\s*heizk[oö]rper\\w*\\s*(?:mit\\s*)?(\\d{2,3})\\s*(?:cm|zentimeter)\\b`, 'gi'),
+    fach: (m) => heizkoerperFach(m[1], m[2]),
+    kategorie: 'bauteil',
+    werkstoff: (m) => heizkoerperTyp(m[1]).werkstoff,
+  },
   // "100er SML", "SML 100", "SML DN 100"
   {
     re: /\b(?:dn\s*)?(\d{2,3})\s*(?:er|mm)?\s*(?:sml|guss)(?:rohr|-?rohr)?(?:\s+rohr)?\b/gi,
@@ -4705,7 +4785,8 @@ function normalisiere(eingabe) {
     text = text.replace(regel.re, (...args) => {
       const m = args.slice(0, -2);
       const fach = regel.fach(m);
-      treffer.push({ roh: m[0].trim(), fach, kategorie: regel.kategorie, werkstoff: regel.werkstoff });
+      const werkstoff = typeof regel.werkstoff === 'function' ? regel.werkstoff(m) : regel.werkstoff;
+      treffer.push({ roh: m[0].trim(), fach, kategorie: regel.kategorie, werkstoff });
       return merke(fach);
     });
   }
@@ -4763,6 +4844,23 @@ function normalisiere(eingabe) {
     } else if (t.werkstoff === 'verbundrohr') {
       material.add('Press- oder Schiebehülsenfittings');
       werkzeug.add('Rohrschere und Kalibrierwerkzeug');
+    }
+  }
+
+  // Heizkörper: Werkzeug/Material je Typ, Rückfrage bei unbekanntem Typ
+  for (const t of treffer) {
+    if (t.kategorie !== 'bauteil' || !String(t.werkstoff || '').startsWith('heizkoerper')) continue;
+    if (t.werkstoff === 'heizkoerper_guss') {
+      werkzeug.add('Rohrzange'); werkzeug.add('Wasserpumpenzange'); werkzeug.add('Auffangwanne bzw. Restwasserbehälter');
+      material.add('Dichtungssatz für Heizkörperanschluss'); material.add('Entlüftungsventil');
+      normen.add('DIN EN 12828');
+      hinweise.add('Gussheizkörper sind schwer und spröde – beim Aus- und Einbau Tragehilfe bzw. zweite Person einsetzen und Anschlussgewinde nicht überdrehen; fachgerechte Entsorgung als Alt-/Schrottmetall.');
+    } else if (t.werkstoff === 'heizkoerper_roehren' || t.werkstoff === 'heizkoerper_platten' || t.werkstoff === 'heizkoerper_kompakt' || t.werkstoff === 'heizkoerper_design') {
+      werkzeug.add('Rohrzange'); werkzeug.add('Wasserpumpenzange');
+      material.add('Dichtungssatz für Heizkörperanschluss');
+      normen.add('DIN EN 442'); normen.add('DIN EN 12828');
+    } else if (t.werkstoff === 'heizkoerper_unbekannt') {
+      hinweise.add('Heizkörpertyp nicht genannt – bitte ergänzen (Guss-, Röhren-, Platten-, Kompakt- oder Designheizkörper) für einen präziseren Eintrag.');
     }
   }
 

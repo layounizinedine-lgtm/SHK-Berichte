@@ -61,6 +61,25 @@ test('Promptbausteine enthalten die erkannten Zuordnungen', () => {
   assert.equal(promptHinweise('hallo welt'), '');
 });
 
+test('Heizkörpertyp wird erkannt und mit Baulänge fachsprachlich formuliert', () => {
+  const n = normalisiere('Demontage 200cm gußheizkörper, danach neu montiert');
+  assert.match(n.text, /Gussheizkörper \(Baulänge 200 cm\)/);
+  assert.ok(n.werkzeug.some((w) => /Wasserpumpenzange/.test(w)));
+  assert.ok(n.hinweise.some((h) => /schwer und spröde/.test(h)));
+});
+
+test('Heizkörper ohne Typ löst eine Rückfrage aus, statt den Typ zu erfinden', () => {
+  const n = normalisiere('Heizkörper demontiert und neuen montiert');
+  assert.match(n.text, /Heizkörper/);
+  assert.ok(!/Guss|Röhren|Platten|Kompakt/.test(n.text));
+  assert.ok(n.hinweise.some((h) => /Heizkörpertyp nicht genannt/.test(h)));
+});
+
+test('Röhren- und Plattenheizkörper werden ohne Baulänge erkannt', () => {
+  assert.match(normalisiere('Röhrenradiator ausgebaut').text, /Röhrenheizkörper \(Röhrenradiator\)/);
+  assert.match(normalisiere('Plattenheizkörper montiert').text, /Plattenheizkörper/);
+});
+
 test('Wissensbasis findet Begriffe auch umgangssprachlich', () => {
   assert.equal(findeWissen('erkläre einen druckminderer')?.begriff, 'Druckminderer');
   assert.equal(findeWissen('was ist ein MAG')?.begriff, 'Membran-Ausdehnungsgefäß (MAG)');
